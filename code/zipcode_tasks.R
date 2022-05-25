@@ -147,9 +147,6 @@ flood_masking <- function(id, rasters){
 
 floods <- flood_masking(USA_DFO, flood_rasters)
 
-# zipcode_flood_info.rds is a list of three lists (flood inundation, flood duration, 
-# cropped polygons - I think these are based on the appropriate year, but not sure) -->
-
 #__________________________________________________________________________________________________________
 
 # Function Goal: Computes the percent flooded and mean/median/max duration among flooded pixels for each zipcode involved in a flood 
@@ -194,25 +191,45 @@ aggregate_measures <- function(id, properties_table, floodwater_info, iso_floodw
 zipcode_flood_measures <- floods %>% aggregate_measures(USA_DFO, USA_table,., .$iso_floodwater, .$iso_floodwater_dur, zipcode_polygons)
 
 saveRDS(zipcode_flood_measures, file = "zipcode_flood_aggmeasures.rds")
+zipcode_flood_measures <- readRDS("zipcode_flood_aggmeasures.rds")
 
-#zipcode_flood_measures <- readRDS("zipcode_flood_aggmeasures.rds")
 
 #__________________________________________________________________________________________________________
 
-# Task: Add the states involved in each flood to properties table
-# 
-# 
-# states_affected <- function(id, properties_table){
-#   states_list <- list()
-#   for (i in 1:length(id)){
-#     ID <- as.character(id[i])
-#     states_list[[ID]] <- unique(flood_measures[[ID]])$state_abbrev
-#   }
-#   properties_table <- tibble(properties_table, "states_affected" = states_list)
-# }
-# df$new_col <- apply(df$states_affected, 1, function(x) paste(x, collapse = ‘/‘))
-# states_affected(USA_DFO, USA_table)
+#Task: Add the flood ID, start/end date to aggregate measures ("master data set")
 
+library(plyr)
+flood_data <- ldply(zipcode_flood_measures, data.frame)
+names(flood_data)[names(flood_data) == ".id"] <- "id"
+
+start_vec <- c()
+end_vec <- c()
+for (i in 1:length(zipcode_flood_measures)){
+  rows <- nrow(zipcode_flood_measures[[i]])
+  start_date <- rep(USA_table$start[i], rows)
+  end_date <- rep(USA_table$end[i], rows)
+  start_vec <- append(start_vec, start_date)
+  end_vec <- append(end_vec, end_date)
+}
+
+flood_data$start <- start_vec
+flood_data$end <- end_vec 
+
+#__________________________________________________________________________________________________________
+
+#Function Goal: Add the states involved in each flood to properties table
+ 
+ states_affected <- function(id, properties_table){
+   states_list <- list()
+   for (i in 1:length(id)){
+     ID <- as.character(id[i])
+     states_list[[ID]] <- unique(zipcode_flood_measures[[ID]]$state_abbrev)
+   }
+   properties_table <- tibble(properties_table, "states_affected" = states_list)
+ }
+
+USA_table <- states_affected(USA_DFO, USA_table)
+saveRDS(USA_table, "USA_table.rds")
 
 #__________________________________________________________________________________________________________
 
@@ -223,38 +240,39 @@ saveRDS(zipcode_flood_measures, file = "zipcode_flood_aggmeasures.rds")
 # Years: 2000-2014 
 # 
 # 
-# This function takes in start and end years (numeric) and returns a dataframe with the DFO flood ID, start/end date, cause, severity and states impacted
-# events_floods <- function(properties_table, start_year, end_year){
-#   #colnames(properties_table) <- c("id", "start", "end", "countries", "days_flooded", "main_cause", "severity", "displaced", "dead")
-#   properties_table$event_years <- as.numeric(substring(properties_table$start,1,4))
-#   events <- properties_table[properties_table$event_years >= start_year & properties_table$event_years <= end_year,]
-#   events <- events[c(1:3,6:7,10)]
-#   return(events)
-# }
-# 
-# 
-# 
-# This function takes in zipcode (vector), start and end years (numeric) and returns a dataframe with the county FIPS, DFO flood ID, start/end date, and aggregate measures 
-# zipcode_floods <- function(properties_table, aggregate_info, zipcodes, start_year, end_year){
-#   zipcode_events <- data.frame()
-#   properties_table$event_years <- as.numeric(substring(properties_table$start,1,4))
-#   event_id <- as.character(properties_table[properties_table$event_years >= start_year & properties_table$event_years <= end_year,]$id)
-#   event_info <- properties_table[properties_table$event_years >= start_year & properties_table$event_years <= end_year,]
-#   event_info <- event_info[,c(1:3)] 
-#   event_info$id <- as.character(event_info$id)
-#   
-#   events <- subset(aggregate_info, names(aggregate_info) == event_id) 
-#   events <- lapply(events, function(x) subset(x, x$zipcode %in% zipcodes))
-#   events <- lapply(events, function(x) x[c("zipcode","pct_flooded", "avg_duration", "median_duration", "total_duration")])
-#   
-#   df_events2 <- data.frame()
-#   for (i in 1:length(events)){
-#     df_events <- as.data.frame(events[[i]])
-#     df_events$id <- as.character(rep(event_id[i], times = nrow(df_events)))
-#     df_events2 <- rbind(df_events2, df_events)
-#   }
-#   zipcode_events <- left_join(df_events2, event_info, by = "id")
-#   zipcode_events <- zipcode_events[c(1,6:8,2:5)]
-#   return(zipcode_events)
-# }
+#This function takes in start and end years (numeric) and returns a dataframe with the DFO flood ID, start/end date, cause, severity and states impacted
 
+events_floods <- function(properties_table, start_year, end_year){
+  #colnames(properties_table) <- c("id", "start", "end", "countries", "days_flooded", "main_cause", "severity", "displaced", "dead")
+  properties_table$event_years <- as.numeric(substring(properties_table$start,1,4))
+  events <- properties_table[properties_table$event_years >= start_year & properties_table$event_years <= end_year,]
+  events <- events[c(1:3,6:7,10)]
+  return(events)
+}
+
+#This function takes in zipcode (vector), start and end years (numeric) and returns a dataframe with the county FIPS, DFO flood ID, start/end date, and aggregate measures
+
+zipcode_floods <- function(properties_table, aggregate_info, zipcodes, start_year, end_year){
+  zipcode_events <- data.frame()
+  properties_table$event_years <- as.numeric(substring(properties_table$start,1,4))
+  event_id <- as.character(properties_table[properties_table$event_years >= start_year & properties_table$event_years <= end_year,]$id)
+  event_info <- properties_table[properties_table$event_years >= start_year & properties_table$event_years <= end_year,]
+  event_info <- event_info[,c(1:3)]
+  event_info$id <- as.character(event_info$id)
+
+  events <- subset(aggregate_info, names(aggregate_info) == event_id)
+  events <- lapply(events, function(x) subset(x, x$zipcode %in% zipcodes))
+  events <- lapply(events, function(x) x[c("zipcode","pct_flooded", "avg_duration", "median_duration", "total_duration")])
+
+  df_events2 <- data.frame()
+  for (i in 1:length(events)){
+    df_events <- as.data.frame(events[[i]])
+    df_events$id <- as.character(rep(event_id[i], times = nrow(df_events)))
+    df_events2 <- rbind(df_events2, df_events)
+  }
+  zipcode_events <- left_join(df_events2, event_info, by = "id")
+  zipcode_events <- zipcode_events[c(1,6:8,2:5)]
+  return(zipcode_events)
+}
+
+zipcode_floods(USA_table, zipcode_flood_measures, c("77584"), start_year = 2000, end_year = 2014)
