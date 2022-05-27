@@ -48,7 +48,7 @@ if(year%in%c(2015:2020)){
 
 # set location for loading and processing admissions files
 library(fst)
-setwd('/n/dominici_nsaph_l3/projects/analytic/admissions_by_year')
+setwd('/n/dominici_nsaph_l3/projects/analytic')
 
 # load admissions file with year of interest and figure out number of rows in file
 file_admissions = paste0('admissions_by_year/admissions_',year,'.fst')
@@ -73,13 +73,16 @@ for(i in seq((length(intervals)-1))){
     dat_admissions = read_fst(file_admissions, from=intervals[i], to=(intervals[i+1]-1))
 
     # summarise by state, county, year, date of admission, CCS code
-    ##DIAG1: ICD-9 code for primary diagnosis 
+    ##DIAG1: ICD-9 code for primary diagnosis (until October 1st, 2015)
   
     dat_admissions_sum = ddply(dat_admissions,.(SSA_STATE_CD,SSA_CNTY_CD,YEAR,ADATE,DIAG1),nrow)
     names(dat_admissions_sum)[names(dat_admissions_sum) == "V1"] <- "cases"
 
     if(year%in%c(2015:2020)){
         # match up icd10 codes to icd9 code using crosswalk
+        #error: dat_admissions_sum is not recognized as a data.table
+        #fix later on if needed 
+        #create new column called "code" with "true" (1) if DIAG1 code is in icd-10 list (?)
         for (code in names(ccs_codes)) {
             dat_admissions_sum[, (code) := DIAG1 %in% ccs_codes[[code]][["icd10"]]]
         }
