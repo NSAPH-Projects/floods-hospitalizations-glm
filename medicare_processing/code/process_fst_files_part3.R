@@ -54,7 +54,7 @@ for(i in seq((length(intervals)-1))){
     # dat_denom = subset(dat_denom,dead==0)
 
     # summarise by year, county 
-    dat_denom_sum = ddply(dat_denom,.(year,FIPS),nrow)
+    dat_denom_sum = ddply(dat_denom,.(year,fips),nrow)
     names(dat_denom_sum)[names(dat_denom_sum) == "V1"] <- "population"
 
     # add na files to total na file to check missing codes
@@ -70,7 +70,7 @@ for(i in seq((length(intervals)-1))){
 }
 
 # summarise one final time to get over entire dataset
-dat_denom_sum_total = ddply(dat_denom_sum_total,.(year,FIPS),summarise,population=sum(population))
+dat_denom_sum_total = ddply(dat_denom_sum_total,.(year,fips),summarise,population=sum(population))
 
 # check to see if total number of original rows (i.e., cases) is total number of final cases in file
 print(year)
@@ -83,6 +83,6 @@ saveRDS(dat_denom_sum_total, paste0(dir.output,'medicare_denom_processing_',year
 
 # save missing icd9 records too
 # dat_denom_sum_total_na = dat_denom_sum_total_na[,1]
-dat_denom_sum_total_na = ddply(dat_denom_sum_total_na,.(year,FIPS),summarise,population=sum(population))
+dat_denom_sum_total_na = ddply(dat_denom_sum_total_na,.(year,fips),summarise,population=sum(population))
 write.csv(dat_denom_sum_total_na, paste0(dir.output,'NA_medicare_denom_processing_',year,'.csv'))
 
