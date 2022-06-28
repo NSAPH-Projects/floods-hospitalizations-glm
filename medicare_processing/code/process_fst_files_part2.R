@@ -27,11 +27,11 @@ for(year in years){
     # load current year's medicare data
     dat.current = readRDS(paste0(dir.input,'medicare_admissions_processing_',year,'.rds'))
 
-    # fix date categories
+    # fix date categories (partially recoded from RMP)
     dat.current$date = format(as.Date(dat.current$ADATE, "%d%B%Y"))
-    dat.current$day = format(as.Date(dat.current$date), "%d")
-    dat.current$month = format(as.Date(dat.current$date), "%m")
-    dat.current$year = format(as.Date(dat.current$date), "%Y")
+    dat.current$year = year(date)
+    dat.current$month = month(date)
+    dat.current$day = day(date)
 
     # fix ccs category
     dat.current$ccs_category = as.numeric(dat.current$ccs_category)
