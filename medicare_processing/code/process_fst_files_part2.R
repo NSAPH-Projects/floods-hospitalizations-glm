@@ -17,13 +17,11 @@ years = c(2000:2014)
 # codes from SSA_STATE_CD info here https://www.resdac.org/cms-data/variables/medpar-beneficiary-residence-ssa-standard-state-code
 
 # location of files
-# dir.input = paste0('~/shared_space/ci3_analysis/rmparks_coastal_storms_Jan_2020/data/medicare_admissions_processing/')
 dir.input = paste0('/n/dominici_nsaph_l3/projects/floods-hospitalizations-glm/medicare_processing/data/in_progress/')
 
 # loop through and load processed admissions file for next stage of processing
 dat.all = data.frame()
 for(year in years){
-# for(year in c(1999:2004)){
     print(paste0('loading ',year))
 
     # load current year's medicare data
@@ -39,11 +37,10 @@ for(year in years){
     dat.current$ccs_category = as.numeric(dat.current$ccs_category)
 
     # summarising by date of admission (which isn't necessarily in the file for the year on record)
-    ##I assume this just means not all records have a date of admission recorded or does it mean that not all records are in the right year (?) 
+    # hospitalizations are dated by discharge year which may not always be in the same year of admission 
     print('summarising file...')
     library(plyr)
     dat.current = ddply(dat.current,.(SSA_STATE_CD,SSA_CNTY_CD,ccs_category,day,month,year),summarise,cases=sum(cases))
-
     dat.all=rbind(dat.all,dat.current)
 }
 
@@ -54,7 +51,6 @@ dat_admissions_sum_total = ddply(dat.all,.(SSA_STATE_CD, SSA_CNTY_CD,ccs_categor
 dat_admissions_sum_total = dat_admissions_sum_total[order(dat_admissions_sum_total$SSA_STATE_CD,dat_admissions_sum_total$SSA_CNTY_CD,dat_admissions_sum_total$ccs_category,dat_admissions_sum_total$year,dat_admissions_sum_total$month,dat_admissions_sum_total$day),]
 
 # save processed admissions file
-# dir.output = paste0('~/git/rmparks_coastal_storms_Jan_2020/data/medicare_admissions_processing/')
 dir.output.local = paste0('/n/dominici_nsaph_l3/projects/floods-hospitalizations-glm/medicare_processing/data/in_progress/')
 ifelse(!dir.exists(dir.output.local), dir.create(dir.output.local, recursive=TRUE), FALSE)
 saveRDS(dat_admissions_sum_total, paste0(dir.output.local,'medicare_admissions_',years[1],'_',years[length(years)],'.rds'))

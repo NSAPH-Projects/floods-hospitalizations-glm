@@ -66,7 +66,6 @@ dat_admissions_sum_total = data.frame()
 dat_admissions_sum_total_na = data.frame()
 
 for(i in seq((length(intervals)-1))){
-# for(i in c(1:2)){
 
     print(paste0('Processing batch ',i,' of ',length(intervals)-1))
 
@@ -100,7 +99,6 @@ for(i in seq((length(intervals)-1))){
     dat_admissions_sum = ddply(dat_admissions_sum,.(SSA_STATE_CD,SSA_CNTY_CD,YEAR,ADATE,ccs_category),summarise,cases=sum(cases))
     
     
-    #I think RMP has these flipped in his code 
     print(paste0('Number of total rows = ',dim(dat_admissions_sum)[1]))
     print(paste0('Number of complete rows = ',dim(na.omit(dat_admissions_sum))[1]))
 
@@ -124,5 +122,4 @@ saveRDS(dat_admissions_sum_total, paste0(dir.output,'medicare_admissions_process
 # save missing icd9 records too
 dat_admissions_sum_total_na = dat_admissions_sum_total_na[,1]
 dat_admissions_sum_total_na = unique(dat_admissions_sum_total_na)
-#saveRDS(dat_admissions_sum_total_na, paste0(dir.output,'NA_medicare_admissions_processing_',year,'.rds'))
 write.csv(dat_admissions_sum_total_na, paste0(dir.output,'NA_medicare_admissions_processing_',year,'.csv'))

@@ -23,7 +23,6 @@ dir.input = paste0('/n/dominici_nsaph_l3/projects/floods-hospitalizations-glm/me
 # loop through and load processed admissions file for next stage of processing
 dat.all = data.frame()
 for(year in years){
-# for(year in c(1999:2004)){
     print(paste0('loading ',year))
 
     # load current year's medicare data
