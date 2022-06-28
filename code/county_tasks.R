@@ -211,31 +211,57 @@ saveRDS(county_flood_measures, file = "county_flood_aggmeasures.rds")
 
 county_flood_measures <- readRDS("county_flood_aggmeasures.rds")
 
+#__________________________________________________________________________________________________________
+
+#Task: Add the flood ID, start date, main cause, and severity to aggregate measures ("master data set")
+
+library(plyr)
+flood_data <- ldply(county_flood_measures, data.frame)
+names(flood_data)[names(flood_data) == ".id"] <- "id"
+
+start_vec <- c()
+cause_vec <-c()
+severity_vec <- c()
+for (i in 1:length(county_flood_measures)){
+  rows <- nrow(county_flood_measures[[i]])
+  start_date <- rep(USA_table$start[i], rows)
+  cause <- rep(USA_table$main_cause[i], rows)
+  severity <- rep(USA_table$severity[i], rows)
+  start_vec <- append(start_vec, start_date)
+  cause_vec <- append(cause_vec, cause)
+  severity_vec <- append(severity_vec, severity)
+}
+
+flood_data$start <- start_vec
+flood_data$main_cause <- cause_vec
+flood_data$severity <- severity_vec
+
+#Add year, month, day columns to dataset 
+
+library(lubridate)
+
+flood_data$year <- year(flood_data$start)
+flood_data$month <- month(flood_data$start)
+flood_data$day <- day(flood_data$start)
+
+saveRDS(flood_data, file = 'county_flood_master_2000_2014.rds')
 
 
 #__________________________________________________________________________________________________________
 
 #Task: Add the states involved in each flood to properties table
 
-# states <- list()
-# for (i in 1:length(USA_DFO)){
-#   ID <- as.character(USA_DFO[i])
-#   states[[ID]] <- unique(flood_measures[[ID]]$`State USPS`)
-# }
-# USA_table <- tibble(USA_table, "states_affected" = states)
-
-#df$new_col <- apply(df$states_affected, 1, function(x) paste(x, collapse = ‘/‘))
-
 states_affected <- function(id, properties_table){
   states_list <- list()
   for (i in 1:length(id)){
     ID <- as.character(id[i])
-    states_list[[ID]] <- unique(flood_measures[[ID]])$state_abbrev
+    states_list[[ID]] <- unique(zipcode_flood_measures[[ID]]$state_abbrev)
   }
   properties_table <- tibble(properties_table, "states_affected" = states_list)
 }
 
-#states_affected(USA_DFO, USA_table)
+USA_table <- states_affected(USA_DFO, USA_table)
+saveRDS(USA_table, "USA_table.rds")
 
 
 #__________________________________________________________________________________________________________

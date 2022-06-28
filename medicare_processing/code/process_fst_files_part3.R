@@ -44,7 +44,6 @@ dat_denom_sum_total = data.frame()
 dat_denom_sum_total_na = data.frame()
 
 for(i in seq((length(intervals)-1))){
-#for(i in c(1:2)){
 
     print(paste0('Processing batch ',i,' of ',length(intervals)-1))
 

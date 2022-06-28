@@ -196,24 +196,38 @@ zipcode_flood_measures <- readRDS("zipcode_flood_aggmeasures.rds")
 
 #__________________________________________________________________________________________________________
 
-#Task: Add the flood ID, start/end date to aggregate measures ("master data set")
+#Task: Add the flood ID, start date, main cause, and severity to aggregate measures ("master data set")
 
 library(plyr)
 flood_data <- ldply(zipcode_flood_measures, data.frame)
 names(flood_data)[names(flood_data) == ".id"] <- "id"
 
 start_vec <- c()
-end_vec <- c()
+cause_vec <-c()
+severity_vec <- c()
 for (i in 1:length(zipcode_flood_measures)){
   rows <- nrow(zipcode_flood_measures[[i]])
   start_date <- rep(USA_table$start[i], rows)
-  end_date <- rep(USA_table$end[i], rows)
+  cause <- rep(USA_table$main_cause[i], rows)
+  severity <- rep(USA_table$severity[i], rows)
   start_vec <- append(start_vec, start_date)
-  end_vec <- append(end_vec, end_date)
+  cause_vec <- append(cause_vec, cause)
+  severity_vec <- append(severity_vec, severity)
 }
 
 flood_data$start <- start_vec
-flood_data$end <- end_vec 
+flood_data$main_cause <- cause_vec
+flood_data$severity <- severity_vec
+
+#Add year, month, day columns to dataset 
+
+library(lubridate)
+
+flood_data$year <- year(flood_data$start)
+flood_data$month <- month(flood_data$start)
+flood_data$day <- day(flood_data$start)
+
+saveRDS(flood_data, file = 'zipcode_flood_master_2000_2014.rds')
 
 #__________________________________________________________________________________________________________
 
