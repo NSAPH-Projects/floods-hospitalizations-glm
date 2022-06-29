@@ -108,14 +108,11 @@ for(ccs_code in ccs_codes){
     # only take years from beginning of actual intended dataset
     dat.merged = subset(dat.merged,year%in%years)
 
-    # exclude those weird georgia counties (confused on why these had to be removed again)
-    #gfips_to_exclude = c(13007, 13037, 13061, 13087, 13099, 13131, 13201, 13239, 13243, 13253, 13273)
-    #dat.merged = subset(dat.merged,!(year%in%c(1999:2001)&fipscounty%in%c(gfips_to_exclude)))
+    # exclude those weird georgia counties (this is done again because of the re-merge with the denominator files) 
+    gfips_to_exclude = c(13007, 13037, 13061, 13087, 13099, 13131, 13201, 13239, 13243, 13253, 13273)
+    dat.merged = subset(dat.merged,!(year%in%c(1999:2001)&fipscounty%in%c(gfips_to_exclude)))
     
-    #afips_to_exclude1 = c(2105, 2195, 2198, 2230, 2275)
-    #dat.merged = subset(dat.merged, !(fipscounty %in% c(afips_to_exclude1) & year %in% c(2000:2008)))
-    #afips_to_exclude2 = c(2232)
-    #dat.merged = subset(dat.merged, !(fipscounty %in% c(afips_to_exclude2) & year %in% c(2000:2004)))
+    #hypothetically would do something similar for Alaska if we knew the exact years it is/isn't present (and potentially Marshall Islands)
     
     # calculate rates
     dat.merged$rates = with(dat.merged,cases/population)
