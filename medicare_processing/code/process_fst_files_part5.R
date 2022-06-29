@@ -156,16 +156,24 @@ dat.merged = subset(dat.merged,!(fipscounty %in% virginia_excluded_counties))
 georgia_excluded_counties = c(13007, 13037, 13061, 13087, 13099,13131, 13201, 13239, 13243, 13253, 13273)
 dat.merged = subset(dat.merged,!(fipscounty %in% georgia_excluded_counties & year %in% c(2000:2001)))
 
-alaska_excluded_counties1 = c(2105, 2195, 2198, 2230, 2275)
-alaska_excluded_counties2 = c(2232)
-dat.merged = subset(dat.merged, !(fipscounty %in% alaska_excluded_counties1 & year %in% c(2000:2008)))
-dat.merged = subset(dat.merged, !(fipscounty %in% alaska_excluded_counties2 & year %in% c(2000:2004)))
+#alaska_excluded_counties1 = c(2105, 2195, 2198, 2230, 2275)
+#alaska_excluded_counties2 = c(2232)
 
-#Not sure if this is the correct code to remove the 'NA' fips code 
+#this must not be the correct years because they don't appear at all anymore except for 2230 -- not worry about 
+#dat.merged = subset(dat.merged, !(fipscounty %in% alaska_excluded_counties1 & year %in% c(2000:2008)))
+#dat.merged = subset(dat.merged, !(fipscounty %in% alaska_excluded_counties2 & year %in% c(2000:2004)))
+
+
+#Not sure if this is the correct code to remove the 'NA' fips code -- this works
+#For now, just remove 'problematic' Alaska counties as well 
+alaska_excluded_counties = c(2105, 2195, 2198, 2230, 2275, 2232)
+dat.merged = subset(dat.merged, !(fipscounty %in% misc_excluded_counties))
 misc_excluded_counties = c(68020, 'NA')
 dat.merged = subset(dat.merged, !(fipscounty %in% misc_excluded_counties))
 
-print(unique(dat.merged$fipscounty))
+
+#Also note that dat.merged includes fips codes from Puerto Rico 
+#print(unique(dat.merged$fipscounty))
 
 # are any of the prevalences greater than 1? Not currently phew
 dat.merged$rate = with(dat.merged,cases/population)
