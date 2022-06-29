@@ -156,6 +156,10 @@ dat.merged = subset(dat.merged,!(fipscounty %in% virginia_excluded_counties))
 georgia_excluded_counties = c(13007, 13037, 13061, 13087, 13099,13131, 13201, 13239, 13243, 13253, 13273)
 dat.merged = subset(dat.merged,!(fipscounty %in% georgia_excluded_counties & year %in% c(2000:2001)))
 
+#remove Alaska unmatched county 
+alaska_excluded_counties = c(02230)
+dat.merged = subset(dat.merged, !(fipscounty %in% alaska_excluded_counties))
+
 #alaska_excluded_counties1 = c(2105, 2195, 2198, 2230, 2275)
 #alaska_excluded_counties2 = c(2232)
 
@@ -163,13 +167,11 @@ dat.merged = subset(dat.merged,!(fipscounty %in% georgia_excluded_counties & yea
 #dat.merged = subset(dat.merged, !(fipscounty %in% alaska_excluded_counties1 & year %in% c(2000:2008)))
 #dat.merged = subset(dat.merged, !(fipscounty %in% alaska_excluded_counties2 & year %in% c(2000:2004)))
 
+#some confusion over what RMP removed and what he didn't, but assuming we will not be following this protocol for zipcodes, it doesn't matter 
 
-#Not sure if this is the correct code to remove the 'NA' fips code -- this works
-#For now, just remove 'problematic' Alaska counties as well 
-alaska_excluded_counties = c(2105, 2195, 2198, 2230, 2275, 2232)
-dat.merged = subset(dat.merged, !(fipscounty %in% misc_excluded_counties))
-misc_excluded_counties = c(68020, 'NA')
-dat.merged = subset(dat.merged, !(fipscounty %in% misc_excluded_counties))
+#This code works but I think we don't have to worry about removing because they were 'matched' (?)
+#misc_excluded_counties = c(68020, 'NA')
+#dat.merged = subset(dat.merged, !(fipscounty %in% misc_excluded_counties))
 
 
 #Also note that dat.merged includes fips codes from Puerto Rico 

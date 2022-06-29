@@ -25,7 +25,7 @@ rownames(dat.admissions)=1:nrow(dat.admissions)
 
 # load processed flood file
 dir.input = paste0('/n/dominici_nsaph_l3/projects/floods-hospitalizations-glm/data/')
-counties.wind = readRDS(paste0(dir.input,'county_flood_master',years[1],'_',years[length(years)],'.rds'))
+counties = readRDS(paste0(dir.input,'county_flood_master',years[1],'_',years[length(years)],'.rds'))
 
 library(plyr)
 
@@ -112,7 +112,10 @@ for(ccs_code in ccs_codes){
     gfips_to_exclude = c(13007, 13037, 13061, 13087, 13099, 13131, 13201, 13239, 13243, 13253, 13273)
     dat.merged = subset(dat.merged,!(year%in%c(1999:2001)&fipscounty%in%c(gfips_to_exclude)))
     
-    #hypothetically would do something similar for Alaska if we knew the exact years it is/isn't present (and potentially Marshall Islands)
+    #I think RMP does not remove Virginia again because it is not present in the dat.admissions file and 
+    #so it won't merge with the denominator file (follow this logic for 02230 FIPS)
+    
+    #hypothetically would do something similar for Alaska if we knew the exact years it is/isn't present
     
     # calculate rates
     dat.merged$rates = with(dat.merged,cases/population)
