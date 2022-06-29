@@ -24,7 +24,8 @@ rownames(dat.admissions)=1:nrow(dat.admissions)
 #wind <- readRDS('wind_data_1999_2014.rds')
 
 # load processed flood file
-dir.input = paste0('/n/dominici_nsaph_l3/projects/floods-hospitalizations-glm/data/')
+#on local, all flood info is under GFD_USA
+dir.input = paste0('/n/dominici_nsaph_l3/projects/floods-hospitalizations-glm/data/flood_info')
 counties = readRDS(paste0(dir.input,'county_flood_master',years[1],'_',years[length(years)],'.rds'))
 
 library(plyr)
