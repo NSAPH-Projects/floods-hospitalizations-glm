@@ -129,5 +129,5 @@ for(ccs_code in ccs_codes){
     print(paste0('Total number of cases = ',sum(dat.merged$cases)))
     print(paste0('Unmatched cases = ',sum(dat.merged.na$cases)))
 
-    saveRDS(dat.merged, paste0(dir.output,'medicare_',gsub(" ", "_", full_name),'_rates_expanded_grid_hospitalisations_',years[1],'_',years[length(years)],'.rds'))
+    saveRDS(dat.merged, paste0(dir.output,'medicare_',gsub(" ", "_", full_diag_name),'_rates_expanded_grid_hospitalisations_',years[1],'_',years[length(years)],'.rds'))
 }
