@@ -46,13 +46,15 @@ ifelse(!dir.exists(dir.output), dir.create(dir.output, recursive=TRUE), FALSE)
 dates = seq(as.Date("2000-01-01"), as.Date("2014-12-31"), by="days")
 
 fipscounty = sort(unique(dat.admissions$fipscounty))
-complete.grid = expand.grid(date=dates,fipscounty=fipscounty)
+complete.grid = expand.grid(dates=dates,fipscounty=fipscounty)
+
+library(lubridate)
 
 #recoded using lubridate 
-complete.grid$year = year(date)
-complete.grid$month = month(date)
-complete.grid$day = day(date)
-complete.grid$date = NULL
+complete.grid$year = year(dates)
+complete.grid$month = month(dates)
+complete.grid$day = day(dates)
+complete.grid$dates = NULL
 
 # PREPARE DENOM FILES
 
