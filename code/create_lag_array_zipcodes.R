@@ -3,18 +3,12 @@
 
 #SA edited from RMP - 7/12/2022
 
-#Not running on the cluster, so we don't need the lines below 
-
-#rm(list=ls())
+rm(list=ls())
 
 # break down the arguments from Rscript
-#args <- commandArgs(trailingOnly=TRUE)
-#start_year <- as.numeric(args[1])
-#end_year = as.numeric(args[2])
-
-start_year <- as.numeric("2000")
-end_year = as.numeric("2016")
-
+args <- commandArgs(trailingOnly=TRUE)
+start_year <- as.numeric(args[1])
+end_year = as.numeric(args[2])
 
 # load necessary packages
 library('tidyverse') ; library('lubridate')
