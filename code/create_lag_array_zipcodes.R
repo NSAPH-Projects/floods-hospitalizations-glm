@@ -59,6 +59,7 @@ for(lag in lags){
 
 #create a grid of all zipcode/date combinations 
 dates = seq(as.Date("2000-01-01"), as.Date("2016-12-31"), by="days")
+all_zipcodes <- as.numeric(all_zipcodes)
 complete_grid = expand.grid(dates=dates,zipcode=all_zipcodes)
 complete_grid$year = year(dates) 
 complete_grid$month = month(dates)

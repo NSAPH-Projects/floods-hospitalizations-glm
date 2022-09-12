@@ -64,6 +64,7 @@ for(lag in lags){
 
 #create a grid of all county/date combinations 
 dates = seq(as.Date("2000-01-01"), as.Date("2014-12-31"), by="days")
+all_counties <- as.numeric(all_counties)
 complete_grid = expand.grid(dates=dates,county_fips=all_counties)
 complete_grid$year = year(dates) 
 complete_grid$month = month(dates)
