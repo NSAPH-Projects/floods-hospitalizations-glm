@@ -78,6 +78,7 @@ for(lag in lags){
   print(paste0('Matching lag ',lag))
   county_flood_edit_array = merge(county_flood_edit_array,get(paste0('county_flood_edit_',lag)),by=c('county_fips','year','month','day'), all.x=TRUE)
 }
+
 county_flood_edit_array[is.na(county_flood_edit_array)] <- 0
 
 # save as rds for analysis
