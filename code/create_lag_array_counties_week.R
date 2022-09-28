@@ -140,4 +140,4 @@ county_flood_final_array_week <- merge(county_flood_edit_array_week, county_floo
 county_flood_final_array_week <- county_flood_final_array_week[-c(1, 6:50)]
 
 # save as rds for analysis
-#saveRDS(county_flood_edit_array, paste0(dir.output,'county_flood_lag_array_',start_year,'_',end_year,'.rds'))
+#saveRDS(county_flood_final_array_week, paste0(dir.output,'county_flood_lag_array_week_',start_year,'_',end_year,'.rds'))
