@@ -252,7 +252,10 @@ rownames(county_flood_semifinal_array_week) <- c(1:nrow(county_flood_semifinal_a
 
 # #merge the aggregated outcomes by flood-county id
 # county_flood_final_array_week <- merge(county_flood_semifinal_array_week, county_flood_array_week_aggregated_outcome, 
-#                                        by = "countyflood_id")
+#                                        by = "floodcounty_id")
+
+#county_flood_final_array_week$floodcounty_id <- NULL
+#county_flood_final_array_week$date <- NULL
 
 # save as rds for analysis
 #saveRDS(county_flood_final_array_week, paste0(dir.output,'county_flood_lag_array_week_',start_year,'_',end_year,'.rds'))
