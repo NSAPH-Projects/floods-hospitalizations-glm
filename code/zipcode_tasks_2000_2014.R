@@ -30,7 +30,7 @@ library(tidyverse)
 # #Need 'rgee' and 'googledrive' setup complete
 # #Save DFO ID's for later use 
 # USA_DFO <- unlist(gfd_USA$aggregate_array('id')$getInfo())
-# saveRDS(USA_DFO, "USA_DFO.rds")
+# saveRDS(USA_DFO, "USA_DFO_2000_2014.rds")
 # 
 # #__________________________________________________________________________________________________________
 # 
@@ -72,7 +72,7 @@ library(tidyverse)
 #   USA_table$main_cause[USA_table$id == x] <- "Heavy rain"
 # }
 # 
-# saveRDS(USA_table, "USA_table.rds")
+# saveRDS(USA_table, "USA_table_2000_2014.rds")
 
 #__________________________________________________________________________________________________________
 
@@ -190,8 +190,8 @@ aggregate_measures <- function(id, properties_table, floodwater_info, iso_floodw
 
 zipcode_flood_measures <- floods %>% aggregate_measures(USA_DFO, USA_table,., .$iso_floodwater, .$iso_floodwater_dur, zipcode_polygons)
 
-saveRDS(zipcode_flood_measures, file = "zipcode_flood_aggmeasures.rds")
-zipcode_flood_measures <- readRDS("zipcode_flood_aggmeasures.rds")
+saveRDS(zipcode_flood_measures, file = "zipcode_flood_aggmeasures_2000_2014.rds")
+zipcode_flood_measures <- readRDS("zipcode_flood_aggmeasures_2000_2014.rds")
 
 
 #__________________________________________________________________________________________________________

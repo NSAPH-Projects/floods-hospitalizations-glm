@@ -28,6 +28,7 @@ gfd_USA <- gfd$select("flooded","duration","jrc_perm_water")$
 #Need 'rgee' and 'googledrive' setup complete
 #Save DFO ID's for later use 
 USA_DFO <- unlist(gfd_USA$aggregate_array('id')$getInfo())
+saveRDS(USA_DFO, "USA_DFO_2000_2014.rds")
 
 #__________________________________________________________________________________________________________
 
@@ -76,6 +77,8 @@ sapply(USA_table[c('displaced','dead')], fivenum) #Min/Median/Max of people disp
 table(USA_table$severity) #How many of each type of severity according to DFO 
 table(USA_table$countries) #Less than half are restricted to the US 
 table(USA_table$main_cause) #How many of each type of cause 
+
+saveRDS(USA_table, "USA_table_2000_2014.rds")
 
 #__________________________________________________________________________________________________________
 
@@ -207,9 +210,9 @@ aggregate_measures <- function(id, floodwater_info, iso_floodwater, iso_floodwat
 #   aggregate_measures(.$iso_floodwater, .$iso_floodwater_dur, .$counties, USA_DFO)
 
 county_flood_measures <- floods %>% aggregate_measures(USA_DFO, ., .$iso_floodwater, .$iso_floodwater_dur, .$counties)
-saveRDS(county_flood_measures, file = "county_flood_aggmeasures.rds")
+saveRDS(county_flood_measures, file = "county_flood_aggmeasures_2000_2014.rds")
 
-county_flood_measures <- readRDS("county_flood_aggmeasures.rds")
+county_flood_measures <- readRDS("county_flood_aggmeasures_2000_2014.rds")
 
 #__________________________________________________________________________________________________________
 
