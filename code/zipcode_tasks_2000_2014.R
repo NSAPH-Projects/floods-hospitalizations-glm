@@ -77,8 +77,8 @@ library(tidyverse)
 #__________________________________________________________________________________________________________
 
 #For ease of use on the cluster 
-USA_DFO <- readRDS("USA_DFO.rds")
-USA_table <- readRDS("USA_table.rds")
+USA_DFO <- readRDS("USA_DFO_2000_2014.rds")
+USA_table <- readRDS("USA_table_2000_2014.rds")
 
 #Function Goal: Using a list, import all rasters into R
 #path is a vector of size one and type character string 
