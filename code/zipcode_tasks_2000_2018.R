@@ -6,98 +6,97 @@ library(tidyverse)
 
 #__________________________________________________________________________________________________________
 
-# # library(googledrive)
-# # drive_auth(email = 'saggarwal@g.harvard.edu', cache = T)
-#  
-# # library(rgee)
-# # ee_check()
-# # ee_Initialize('saggarwal', drive = TRUE)
-#  
-# gfd <- ee$ImageCollection('GLOBAL_FLOOD_DB/MODIS_EVENTS/V1')
-#  
-# # #On GFD, they count US floods as long as portion of US was involved --> 98 flood maps 
-# USAfilter <- ee$Filter$stringContains("cc", 'USA')
-#  
-# gfd_USA <- gfd$select("flooded","duration","jrc_perm_water")$
-# filter(USAfilter)$
-# filterDate("2000-01-01","2018-12-31")
-#  
-# # gfd_USA$getInfo()
-#  
-# # #According to GFD, we should have 98 flood maps (for 2000-2018)
-# # #Use ee_print(gfd_USA) to print MetaData about the ImageCollection, first Image, and first Band
-#  
-# # #Need 'rgee' and 'googledrive' setup complete
-# # #Save DFO ID's for later use 
-# USA_DFO <- unlist(gfd_USA$aggregate_array('id')$getInfo())
-# saveRDS(USA_DFO, "USA_DFO_2000_2018.rds")
-# 
+library(googledrive)
+drive_auth(email = 'saggarwal@g.harvard.edu', cache = T)
+
+library(rgee)
+ee_check()
+ee_Initialize('saggarwal', drive = TRUE)
+
+gfd <- ee$ImageCollection('GLOBAL_FLOOD_DB/MODIS_EVENTS/V1')
+
+#On GFD, they count US floods as long as portion of US was involved --> 98 flood maps
+USAfilter <- ee$Filter$stringContains("cc", 'USA')
+
+gfd_USA <- gfd$select("flooded","duration","jrc_perm_water")$
+           filter(USAfilter)$
+           filterDate("2000-01-01","2018-12-31")
+
+#gfd_USA$getInfo()
+
+#According to GFD, we should have 98 flood maps (for 2000-2018)
+#Use ee_print(gfd_USA) to print MetaData about the ImageCollection, first Image, and first Band
+
+# Need 'rgee' and 'googledrive' setup complete
+# Save DFO ID's for later use
+USA_DFO <- unlist(gfd_USA$aggregate_array('id')$getInfo())
+saveRDS(USA_DFO, "USA_DFO_2000_2018.rds")
+
 # __________________________________________________________________________________________________________
 
-#Function Goal: Creates a table that includes properties of each flood 
-#collection is a GEE image collection 
-# properties_table <- function(collection){
-#   id <- unlist(collection$aggregate_array('id')$getInfo())
-#   #countries is missing for 3 floods 
-#   #countries <- unlist(collection$aggregate_array('countries')$getInfo())
-#   start <- as.Date(unlist(collection$aggregate_array('began')$getInfo()))
-#   end <- as.Date(unlist(collection$aggregate_array('ended')$getInfo()))
-#   days_flooded <- difftime(end, start, units = "days")
-#   main_cause <- unlist(collection$aggregate_array('dfo_main_cause')$getInfo())
-#   severity <- unlist(collection$aggregate_array('dfo_severity')$getInfo())
-#   displaced <- unlist(collection$aggregate_array('dfo_displaced')$getInfo())
-#   dead <- unlist(collection$aggregate_array('dfo_dead')$getInfo())
-#   table <- data.frame(id, start, end, days_flooded, main_cause, severity, displaced, dead)
-#   return(table)
-# }
-# 
-# USA_table <- properties_table(gfd_USA)
-# 
-# Standardize main cause variable for this specific collection using gfd as reference
-# This is bad practice because it relies on an external resource
-# for (x in c(2491, 3815, 3689, 3625)){
-#   USA_table$main_cause[USA_table$id == x] <- "Dam"
-# }
-# for (x in c(2719, 3861, 2566, 3977, 2356, 3671, 2753, 2735, 3336,
-#             3366, 2959, 2063, 3567, 3370, 4516, 4695, 4676)){
-#   USA_table$main_cause[USA_table$id == x] <- "Tropical Storm, Surge"
-# }
-# for (x in c(3799, 3285, 2007, 2841, 2829, 2462, 3300, 3092, 3268, 2182, 4051, )){
-#   USA_table$main_cause[USA_table$id == x] <- "Snowmelt, Ice, Rain"
-# }
-# y <- setdiff(USA_table$id, c(2491, 3815, 3689, 3625,2719, 3861,
-#                              2566, 3977, 2356, 3671, 2753, 2735, 3336,
-#                              3366, 2959, 2063, 3567, 3370,3799, 3285, 2007, 2841,
-#                              2829, 2462, 3300, 3092, 3268, 2182, 4051, 4516, 4695, 4676))
-# for (x in y){
-#   USA_table$main_cause[USA_table$id == x] <- "Heavy rain"
-# }
-# 
-# saveRDS(USA_table, "USA_table_2000_2018.rds")
+#Function Goal: Creates a table that includes properties of each flood
+#collection is a GEE image collection
+properties_table <- function(collection){
+  id <- unlist(collection$aggregate_array('id')$getInfo())
+  #countries is missing for 3 floods
+  #countries <- unlist(collection$aggregate_array('countries')$getInfo())
+  start <- as.Date(unlist(collection$aggregate_array('began')$getInfo()))
+  end <- as.Date(unlist(collection$aggregate_array('ended')$getInfo()))
+  days_flooded <- difftime(end, start, units = "days")
+  main_cause <- unlist(collection$aggregate_array('dfo_main_cause')$getInfo())
+  severity <- unlist(collection$aggregate_array('dfo_severity')$getInfo())
+  displaced <- unlist(collection$aggregate_array('dfo_displaced')$getInfo())
+  dead <- unlist(collection$aggregate_array('dfo_dead')$getInfo())
+  table <- data.frame(id, start, end, days_flooded, main_cause, severity, displaced, dead)
+  return(table)
+}
+
+USA_table <- properties_table(gfd_USA)
+#Standardize main cause variable for this specific collection using gfd as reference
+#This is bad practice because it relies on an external resource
+for (x in c(2491, 3815, 3689, 3625)){
+  USA_table$main_cause[USA_table$id == x] <- "Dam"
+}
+for (x in c(2719, 3861, 2566, 3977, 2356, 3671, 2753, 2735, 3336,
+            3366, 2959, 2063, 3567, 3370, 4516, 4695, 4676)){
+  USA_table$main_cause[USA_table$id == x] <- "Tropical Storm, Surge"
+}
+for (x in c(3799, 3285, 2007, 2841, 2829, 2462, 3300, 3092, 3268, 2182, 4051, )){
+  USA_table$main_cause[USA_table$id == x] <- "Snowmelt, Ice, Rain"
+}
+y <- setdiff(USA_table$id, c(2491, 3815, 3689, 3625,2719, 3861,
+                             2566, 3977, 2356, 3671, 2753, 2735, 3336,
+                             3366, 2959, 2063, 3567, 3370,3799, 3285, 2007, 2841,
+                             2829, 2462, 3300, 3092, 3268, 2182, 4051, 4516, 4695, 4676))
+for (x in y){
+  USA_table$main_cause[USA_table$id == x] <- "Heavy rain"
+}
+
+saveRDS(USA_table, "USA_table_2000_2018.rds")
 
 #__________________________________________________________________________________________________________
 
-# Function Goal: Convert each GEE image in GEE image collection to a raster 
-# collection is a GEE image collection 
-# imagecollection_to_raster <- function(collection){
-#   #Vector of DFO Flood ID's 
-#   id <- unlist(collection$aggregate_array('id')$getInfo())
-#   # we start at the 84th flood (ID = 4230) because we already have maps for 2000-2014
-#   for (i in 84:length(id)){
-#     ID <- id[i]
-#     file_name <- as.character(ID)
-#     #Convert image collection to individual images 
-#     img <- ee$Image(gfd_USA$filterMetadata('id', 'equals', ID)$first())
-#     #Convert all bands to the same type ('flooded' + 'jrc_perm_water' are UInt8 or Byte; duration is UInt16)
-#     img_converted <- img$toByte()
-#     #Convert each image to raster for easier use 
-#     img_raster <- ee_as_raster(image = img_converted, via = "drive", dsn = file_name)
-#   }
-# }
-# imagecollection_to_raster(gfd_USA)
-# 
-# Note: Exporting the image collection to Google Drive takes multiple hours (10+), but they are located in 'rgee_backup' folder on Google Drive unless different container specified 
-# Note: The .tif files also download locally to where this .RMD file is located  
+# Function Goal: Convert each GEE image in GEE image collection to a raster
+# collection is a GEE image collection
+imagecollection_to_raster <- function(collection){
+  #Vector of DFO Flood ID's
+  id <- unlist(collection$aggregate_array('id')$getInfo())
+  # we start at the 84th flood (ID = 4230) because we already have maps for 2000-2014
+  for (i in 84:length(id)){
+    ID <- id[i]
+    file_name <- as.character(ID)
+    #Convert image collection to individual images
+    img <- ee$Image(gfd_USA$filterMetadata('id', 'equals', ID)$first())
+    #Convert all bands to the same type ('flooded' + 'jrc_perm_water' are UInt8 or Byte; duration is UInt16)
+    img_converted <- img$toByte()
+    #Convert each image to raster for easier use
+    img_raster <- ee_as_raster(image = img_converted, via = "drive", dsn = file_name)
+  }
+}
+imagecollection_to_raster(gfd_USA)
+
+# Note: Exporting the image collection to Google Drive takes multiple hours (10+), but they are located in 'rgee_backup' folder on Google Drive unless different container specified
+# Note: The .tif files also download locally to where this .RMD file is located
 
 #__________________________________________________________________________________________________________
 
@@ -285,39 +284,39 @@ saveRDS(USA_table, "USA_table_2000_2018.rds")
 # For every flood, zip code combination, we want a row that gives key information
 # Both functions rely on the use of a simple properties table that was developed using 'rgee' 
 # Years: 2000-2018 
-#  
-#  
-# This function takes in start and end years (numeric) and returns a dataframe with the DFO flood ID, start/end date, cause, severity and states impacted
-# 
-# events_floods <- function(properties_table, start_year, end_year){
-#   #colnames(properties_table) <- c("id", "start", "end", "countries", "days_flooded", "main_cause", "severity", "displaced", "dead")
-#   properties_table$event_years <- as.numeric(substring(properties_table$start,1,4))
-#   events <- properties_table[properties_table$event_years >= start_year & properties_table$event_years <= end_year,]
-#   events <- events[c(1:3,6:7,10)]
-#   return(events)
-# }
-# 
-# This function takes in zipcode (vector), start and end years (numeric) and returns a dataframe with the county FIPS, DFO flood ID, start/end date, and aggregate measures
-# 
-# zipcode_floods <- function(properties_table, aggregate_info, zipcodes, start_year, end_year){
-#   zipcode_events <- data.frame()
-#   properties_table$event_years <- as.numeric(substring(properties_table$start,1,4))
-#   event_id <- as.character(properties_table[properties_table$event_years >= start_year & properties_table$event_years <= end_year,]$id)
-#   event_info <- properties_table[properties_table$event_years >= start_year & properties_table$event_years <= end_year,]
-#   event_info <- event_info[,c(1:3)]
-#   event_info$id <- as.character(event_info$id)
-#   
-#   events <- subset(aggregate_info, names(aggregate_info) == event_id)
-#   events <- lapply(events, function(x) subset(x, x$zipcode %in% zipcodes))
-#   events <- lapply(events, function(x) x[c("zipcode","pct_flooded", "avg_duration", "median_duration", "total_duration")])
-#   
-#   df_events2 <- data.frame()
-#   for (i in 1:length(events)){
-#     df_events <- as.data.frame(events[[i]])
-#     df_events$id <- as.character(rep(event_id[i], times = nrow(df_events)))
-#     df_events2 <- rbind(df_events2, df_events)
-#   }
-#   zipcode_events <- left_join(df_events2, event_info, by = "id")
-#   zipcode_events <- zipcode_events[c(1,6:8,2:5)]
-#   return(zipcode_events)
-# }
+
+
+#This function takes in start and end years (numeric) and returns a dataframe with the DFO flood ID, start/end date, cause, severity and states impacted
+
+events_floods <- function(properties_table, start_year, end_year){
+  #colnames(properties_table) <- c("id", "start", "end", "countries", "days_flooded", "main_cause", "severity", "displaced", "dead")
+  properties_table$event_years <- as.numeric(substring(properties_table$start,1,4))
+  events <- properties_table[properties_table$event_years >= start_year & properties_table$event_years <= end_year,]
+  events <- events[c(1:3,6:7,10)]
+  return(events)
+}
+
+#This function takes in zipcode (vector), start and end years (numeric) and returns a dataframe with the county FIPS, DFO flood ID, start/end date, and aggregate measures
+
+zipcode_floods <- function(properties_table, aggregate_info, zipcodes, start_year, end_year){
+  zipcode_events <- data.frame()
+  properties_table$event_years <- as.numeric(substring(properties_table$start,1,4))
+  event_id <- as.character(properties_table[properties_table$event_years >= start_year & properties_table$event_years <= end_year,]$id)
+  event_info <- properties_table[properties_table$event_years >= start_year & properties_table$event_years <= end_year,]
+  event_info <- event_info[,c(1:3)]
+  event_info$id <- as.character(event_info$id)
+
+  events <- subset(aggregate_info, names(aggregate_info) == event_id)
+  events <- lapply(events, function(x) subset(x, x$zipcode %in% zipcodes))
+  events <- lapply(events, function(x) x[c("zipcode","pct_flooded", "avg_duration", "median_duration", "total_duration")])
+
+  df_events2 <- data.frame()
+  for (i in 1:length(events)){
+    df_events <- as.data.frame(events[[i]])
+    df_events$id <- as.character(rep(event_id[i], times = nrow(df_events)))
+    df_events2 <- rbind(df_events2, df_events)
+  }
+  zipcode_events <- left_join(df_events2, event_info, by = "id")
+  zipcode_events <- zipcode_events[c(1,6:8,2:5)]
+  return(zipcode_events)
+}
