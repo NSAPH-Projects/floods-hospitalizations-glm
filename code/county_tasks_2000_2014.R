@@ -115,7 +115,7 @@ import_rasters <- function(path, id){
   return(flood_rasters)
 }
 
-path <- '/Users/sarikaaggarwal/Desktop/HARVARD/Spring2022/IndStudy/GFD_USA'
+path <- '/Users/sarikaaggarwal/Desktop/HARVARD/Spring2022/IndStudy/GFD_USA/flood_maps'
 #import_rasters(path, USA_DFO)
 
 #__________________________________________________________________________________________________________

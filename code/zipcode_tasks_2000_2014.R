@@ -91,7 +91,7 @@ import_rasters <- function(path, id){
 }
 
 #Changed on cluster to '~/flood'
-path <- '/Users/sarikaaggarwal/Desktop/HARVARD/Spring2022/IndStudy/GFD_USA'
+path <- '/Users/sarikaaggarwal/Desktop/HARVARD/Spring2022/IndStudy/GFD_USA/flood_maps'
 
 
 
