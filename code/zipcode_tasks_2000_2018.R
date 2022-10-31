@@ -115,6 +115,7 @@ import_rasters <- function(path, id){
 }
 
 #Changed on cluster to '~/flood'
+#Note: files now save out to flood_maps folder unless add in output directory line later 
 path <- '/Users/sarikaaggarwal/Desktop/HARVARD/Spring2022/IndStudy/GFD_USA/flood_maps/'
 
 flood_rasters <- import_rasters(path, USA_DFO)
@@ -199,7 +200,7 @@ aggregate_measures <- function(id, properties_table, floodwater_info, iso_floodw
   )
   df <- data.frame(cbind(properties_table$id,zipcodes_years))
   colnames(df) <- c("id", "zipcodes_years")
-  for (i in 1:length(id)){
+  for (i in 84:length(id)){
     ID <- as.character(id[i])
     floodwater <- iso_floodwater[[ID]]
     floodwater_dur <- iso_floodwater_dur[[ID]]
@@ -220,10 +221,14 @@ aggregate_measures <- function(id, properties_table, floodwater_info, iso_floodw
 }
 
 
-zipcode_flood_measures <- floods %>% aggregate_measures(USA_DFO, USA_table,., .$iso_floodwater, .$iso_floodwater_dur, zipcode_polygons)
+zipcode_flood_measures_new <- floods %>% aggregate_measures(USA_DFO, USA_table,., .$iso_floodwater, .$iso_floodwater_dur, zipcode_polygons)
+saveRDS(zipcode_flood_measures_new, file = "zipcode_flood_aggmeasures_2015_2018.rds")
 
-saveRDS(zipcode_flood_measures, file = "zipcode_flood_aggmeasures_2000_2018.rds")
-zipcode_flood_measures <- readRDS("zipcode_flood_aggmeasures_2000_2018.rds")
+zipcode_flood_measures_old <- readRDS("~/Desktop/HARVARD/Spring2022/IndStudy/GFD_USA/zipcode_flood_aggmeasures_2000_2014.rds")
+
+zipcode_flood_measures_all <- c(zipcode_flood_measures_old,zipcode_flood_measures_new)
+saveRDS(zipcode_flood_measures_all, "zipcode_flood_aggmeasures_2000_2018.rds")
+
 
 
 #__________________________________________________________________________________________________________
@@ -231,14 +236,14 @@ zipcode_flood_measures <- readRDS("zipcode_flood_aggmeasures_2000_2018.rds")
 #Task: Add the flood ID, start date, main cause, and severity to aggregate measures ("master data set")
 
 library(plyr)
-flood_data <- plyr::ldply(zipcode_flood_measures, data.frame)
+flood_data <- plyr::ldply(zipcode_flood_measures_all, data.frame)
 names(flood_data)[names(flood_data) == ".id"] <- "id"
 
 start_vec <- c()
 cause_vec <-c()
 severity_vec <- c()
-for (i in 1:length(zipcode_flood_measures)){
-  rows <- nrow(zipcode_flood_measures[[i]])
+for (i in 1:length(zipcode_flood_measures_all)){
+  rows <- nrow(zipcode_flood_measures_all[[i]])
   start_date <- rep(USA_table$start[i], rows)
   cause <- rep(USA_table$main_cause[i], rows)
   severity <- rep(USA_table$severity[i], rows)
@@ -269,7 +274,7 @@ states_affected <- function(id, properties_table){
   states_list <- list()
   for (i in 1:length(id)){
     ID <- as.character(id[i])
-    states_list[[ID]] <- unique(zipcode_flood_measures[[ID]]$state_abbrev)
+    states_list[[ID]] <- unique(zipcode_flood_measures_all[[ID]]$state_abbrev)
   }
   properties_table <- tibble(properties_table, "states_affected" = states_list)
 }
@@ -289,14 +294,14 @@ saveRDS(USA_table, "USA_table_2000_2018.rds")
 #This function takes in start and end years (numeric) and returns a dataframe with the DFO flood ID, start/end date, cause, severity and states impacted
 
 events_floods <- function(properties_table, start_year, end_year){
-  #colnames(properties_table) <- c("id", "start", "end", "countries", "days_flooded", "main_cause", "severity", "displaced", "dead")
+  #colnames(properties_table) <- c("id", "start", "end", "days_flooded", "main_cause", "severity", "displaced", "dead")
   properties_table$event_years <- as.numeric(substring(properties_table$start,1,4))
   events <- properties_table[properties_table$event_years >= start_year & properties_table$event_years <= end_year,]
   events <- events[c(1:3,6:7,10)]
   return(events)
 }
 
-#This function takes in zipcode (vector), start and end years (numeric) and returns a dataframe with the county FIPS, DFO flood ID, start/end date, and aggregate measures
+#This function takes in zipcode (vector), start and end years (numeric) and returns a dataframe with the zipcode, DFO flood ID, start/end date, and aggregate measures
 
 zipcode_floods <- function(properties_table, aggregate_info, zipcodes, start_year, end_year){
   zipcode_events <- data.frame()
