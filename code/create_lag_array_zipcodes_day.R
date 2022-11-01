@@ -17,7 +17,7 @@ setwd('~/Desktop/HARVARD/Spring2022/IndStudy/GFD_USA/')
 dir.output('~/Desktop/HARVARD/Spring2022/IndStudy/GFD_USA/')
 zipcode_flood_data <- readRDS('zipcode_flood_master_2000_2014.rds')
 
-zipcode_flood_data <- zipcode_flood_data[,c(1:7,9:10,8,11:13)]
+#zipcode_flood_data <- zipcode_flood_data[,c(1:7,9:10,8,11:13)]
 #zipcode_flood_data$zipcode <- as.numeric(zipcode_flood_data$zipcode)
 
 # to obtain the number of unique zipcodes (19710 zipcodes)
