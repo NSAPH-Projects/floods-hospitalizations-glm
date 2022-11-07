@@ -12,29 +12,29 @@
 #end_year = as.numeric(args[2])
 
 start_year <- as.numeric("2000")
-end_year = as.numeric("2018")
+end_year = as.numeric("2016")
 
 # load necessary packages
 library('tidyverse') ; library('lubridate')
 
 setwd('~/Desktop/HARVARD/Spring2022/IndStudy/GFD_USA/')
 dir.output<- '~/Desktop/HARVARD/Spring2022/IndStudy/GFD_USA/'
-zipcode_flood_data <- readRDS('zipcode_flood_master_2000_2018.rds')
+#zipcode_flood_data <- readRDS('zipcode_flood_master_2000_2018.rds')
+#zipcode_flood_data <- zipcode_flood_data %>% filter(year <= 2016)
 
-zipcode_flood_data <- zipcode_flood_data[,c(1,6:8,2:5,10:11,9,12:14)]
 # zipcode_flood_data$total_duration <- ifelse(zipcode_flood_data$total_duration > 14, 
 #                                            14, zipcode_flood_data$total_duration)
 
 # zipcode_flood_data$zipcode <- as.numeric(zipcode_flood_data$zipcode)
 
 #remove floods caused by dams and snowmelt 
-zipcode_flood_data_no_dams_snowmelt <- zipcode_flood_data[!(zipcode_flood_data$main_cause == "Dam") 
-                                                        & !(zipcode_flood_data$main_cause == "Snowmelt, Ice, Rain"),]
+# zipcode_flood_data_no_dams_snowmelt <- zipcode_flood_data[!(zipcode_flood_data$main_cause == "Dam") 
+#                                                         & !(zipcode_flood_data$main_cause == "Snowmelt, Ice, Rain"),]
+#zipcode_flood_data_no_dams_snowmelt <-zipcode_flood_data_no_dams_snowmelt[,c(1:3,8:13,4:7)]
+#saveRDS(zipcode_flood_data_no_dams_snowmelt, "zipcode_flood_master_no_dams_snowmelt_2000_2016.rds")
+zipcode_flood_data_no_dams_snowmelt <- readRDS('zipcode_flood_master_no_dams_snowmelt_2000_2016.rds')
 
-saveRDS(zipcode_flood_data_no_dams_snowmelt, "zipcode_flood_master_no_dams_snowmelt_2000_2018.rds")
-
-
-# to obtain the number of unique zips ( sips total,  zips subset)
+# to obtain the number of unique zips (19104 zips in subset, 20561 in total)
 all_zips = as.numeric(unique(zipcode_flood_data_no_dams_snowmelt$zipcode))
 
 #to determine number of states included, use USA_table (should be all except Hawaii)
@@ -42,28 +42,13 @@ all_zips = as.numeric(unique(zipcode_flood_data_no_dams_snowmelt$zipcode))
 list_df <- list()
 names_of_df <- c()
 names_col_df1 <- c("zipcode", "date", "year", "month", "day")
-names_col_df2 <- c("event_exposed1", "event_exposed2", "event_exposed3", "event_exposed4", 
-                   "event_exposed5", "event_exposed6", "event_exposed7", "event_exposed8", 
-                   "event_exposed9", "event_exposed10", "event_exposed11", "event_exposed12", 
-                   "event_exposed13", "event_exposed14","event_exposed15", "event_exposed16", 
-                   "event_exposed17", "event_exposed18","event_exposed19", "event_exposed20", 
-                   "event_exposed21", "event_exposed22", "event_exposed23", "event_exposed24", 
-                   "event_exposed25", "event_exposed26","event_exposed27", "event_exposed28",
-                   "event_exposed29", "event_exposed30", "event_exposed31")
-
-names_col_df3 <- c("event_lag1", "event_lag2", "event_lag3", "event_lag4",
-                    "event_lag5", "event_lag6", "event_lag7", "event_lag8",
-                    "event_lag9", "event_lag10", "event_lag11", "event_lag12",
-                    "event_lag13", "event_lag14", "event_lag15", "event_lag16",
-                   "event_lag17", "event_lag18", "event_lag19", "event_lag20",
-                   "event_lag21", "event_lag22", "event_lag23", "event_lag24",
-                   "event_lag25", "event_lag26", "event_lag27", "event_lag28")
-
-#change in code from 31 to max_duration 
 max_duration <- max(zipcode_flood_data_no_dams_snowmelt$total_duration)
+names_col_df2 <- paste0('event_exposed',1:max_duration)
+num_lagweeks <- 4
+names_col_df3 <- paste0('event_lag',1:(7*num_lagweeks))
 
 #change in code from 28 to be 7*num_lagweeks
-num_lagweeks <- 4
+
 for (i in 1:nrow(zipcode_flood_data_no_dams_snowmelt)){
   df1 <- data.frame(matrix(NA, nrow = zipcode_flood_data_no_dams_snowmelt$total_duration[i] + 7*num_lagweeks, ncol = 5))
   colnames(df1) <- names_col_df1
@@ -105,45 +90,22 @@ names(zipcode_flood_edit_array_week)[names(zipcode_flood_edit_array_week) == ".i
 zipcode_flood_edit_array_week[is.na(zipcode_flood_edit_array_week)] <- 0
 
 #add indicators for exposed weeks and lag weeks 
-#consider rewriting using tidyverse::case_when
-zipcode_flood_edit_array_week$event_exposed <- ifelse(zipcode_flood_edit_array_week$event_exposed1 == 1 | 
-                        zipcode_flood_edit_array_week$event_exposed2 == 1 | zipcode_flood_edit_array_week$event_exposed3 == 1 | 
-                        zipcode_flood_edit_array_week$event_exposed4 == 1 | zipcode_flood_edit_array_week$event_exposed5 == 1 | 
-                        zipcode_flood_edit_array_week$event_exposed6 == 1 | zipcode_flood_edit_array_week$event_exposed7 == 1 | 
-                        zipcode_flood_edit_array_week$event_exposed8 == 1 | zipcode_flood_edit_array_week$event_exposed9 == 1 | 
-                        zipcode_flood_edit_array_week$event_exposed10 == 1 | zipcode_flood_edit_array_week$event_exposed11 == 1 | 
-                        zipcode_flood_edit_array_week$event_exposed12 == 1 | zipcode_flood_edit_array_week$event_exposed13 == 1 | 
-                        zipcode_flood_edit_array_week$event_exposed14 == 1 | zipcode_flood_edit_array_week$event_exposed15 == 1 | 
-                        zipcode_flood_edit_array_week$event_exposed16 == 1 | zipcode_flood_edit_array_week$event_exposed17 == 1 | 
-                        zipcode_flood_edit_array_week$event_exposed18 == 1 | zipcode_flood_edit_array_week$event_exposed19 == 1 | 
-                        zipcode_flood_edit_array_week$event_exposed20 == 1 | zipcode_flood_edit_array_week$event_exposed21 == 1 | 
-                        zipcode_flood_edit_array_week$event_exposed22 == 1 | zipcode_flood_edit_array_week$event_exposed23 == 1 | 
-                        zipcode_flood_edit_array_week$event_exposed24 == 1 | zipcode_flood_edit_array_week$event_exposed25 == 1 | 
-                        zipcode_flood_edit_array_week$event_exposed26 == 1 | zipcode_flood_edit_array_week$event_exposed27 == 1 | 
-                        zipcode_flood_edit_array_week$event_exposed28 == 1 | zipcode_flood_edit_array_week$event_exposed29 == 1 | 
-                        zipcode_flood_edit_array_week$event_exposed30 == 1 | zipcode_flood_edit_array_week$event_exposed31 == 1, 1, 0)
+zipcode_flood_edit_array_week$event_exposed <- ifelse(rowSums(zipcode_flood_edit_array_week[,c(7:48)]) >= 1, 1, 0)
     
-zipcode_flood_edit_array_week$event_lagwk1 <- ifelse(zipcode_flood_edit_array_week$event_lag1 == 1 | zipcode_flood_edit_array_week$event_lag2 == 1 |
-                        zipcode_flood_edit_array_week$event_lag3 == 1 | zipcode_flood_edit_array_week$event_lag4 == 1 |
-                        zipcode_flood_edit_array_week$event_lag5 == 1 | zipcode_flood_edit_array_week$event_lag6 == 1 |
-                        zipcode_flood_edit_array_week$event_lag7 == 1, 1, 0)
-zipcode_flood_edit_array_week$event_lagwk2 <- ifelse(zipcode_flood_edit_array_week$event_lag8 == 1 | zipcode_flood_edit_array_week$event_lag9 == 1 |
-                        zipcode_flood_edit_array_week$event_lag10 == 1 | zipcode_flood_edit_array_week$event_lag11 == 1 |
-                        zipcode_flood_edit_array_week$event_lag12 == 1 | zipcode_flood_edit_array_week$event_lag13 == 1 |
-                        zipcode_flood_edit_array_week$event_lag14 == 1, 1, 0)
-zipcode_flood_edit_array_week$event_lagwk3 <- ifelse(zipcode_flood_edit_array_week$event_lag15 == 1 | zipcode_flood_edit_array_week$event_lag16 == 1 |
-                        zipcode_flood_edit_array_week$event_lag17 == 1 | zipcode_flood_edit_array_week$event_lag18 == 1 |
-                        zipcode_flood_edit_array_week$event_lag19 == 1 | zipcode_flood_edit_array_week$event_lag20 == 1 |
-                        zipcode_flood_edit_array_week$event_lag21 == 1, 1, 0)
-zipcode_flood_edit_array_week$event_lagwk4 <- ifelse(zipcode_flood_edit_array_week$event_lag22 == 1 | zipcode_flood_edit_array_week$event_lag23 == 1 |
-                        zipcode_flood_edit_array_week$event_lag24 == 1 | zipcode_flood_edit_array_week$event_lag25 == 1 |
-                        zipcode_flood_edit_array_week$event_lag26 == 1 | zipcode_flood_edit_array_week$event_lag27 == 1 |
-                        zipcode_flood_edit_array_week$event_lag28 == 1, 1, 0)
+zipcode_flood_edit_array_week$event_lagwk1 <- ifelse(rowSums(zipcode_flood_edit_array_week[,c(49:55)]) >= 1, 1, 0)
+zipcode_flood_edit_array_week$event_lagwk2 <- ifelse(rowSums(zipcode_flood_edit_array_week[,c(56:62)]) >= 1, 1, 0)
+zipcode_flood_edit_array_week$event_lagwk3 <- ifelse(rowSums(zipcode_flood_edit_array_week[,c(63:69)]) >= 1, 1, 0)
+zipcode_flood_edit_array_week$event_lagwk4 <- ifelse(rowSums(zipcode_flood_edit_array_week[,c(70:76)]) >= 1, 1, 0)
 
 #can remove date and flood-zipcode id columns later 
 #remove exposure + lag day indicators 
-zipcode_flood_exp_lag_array_week  <- zipcode_flood_edit_array_week[-c(7:65)]
+zipcode_flood_exp_lag_array_week  <- zipcode_flood_edit_array_week[-c(7:76)]
 zipcode_flood_exp_lag_array_week$zipcode <- as.numeric(zipcode_flood_exp_lag_array_week$zipcode)
+
+#control == 0 --> flood (exposure/lag)
+zipcode_flood_exp_lag_array_week$control_indicator <- 0
+
+saveRDS(zipcode_flood_exp_lag_array_week, "zipcode_flood_exp_lag_array_week_2000_2016.rds")
 
 floodzip_id_list <- unique(zipcode_flood_exp_lag_array_week$floodzip_id)
 
@@ -154,7 +116,7 @@ zipcode_flood_summarized_date_array <- zipcode_flood_exp_lag_array_week %>%
                                            'max_date' = max(date))
 
 zipcode_flood_summarized_date_array$zipcode <- as.numeric(substr(zipcode_flood_summarized_date_array$floodzip_id, 15, 20))
-
+saveRDS(zipcode_flood_summarized_date_array, "zipcode_flood_summarized_date_array_2000_2016.rds")
 
 #for each year, change the year to be a different year in dataset then compare each control to original set of floods within that specific zipcode
 #if overlaps = 0, if no overlap = 1 --> pick closest to the year of flood and then add all dates within bound to array
@@ -175,6 +137,10 @@ i <- 1
       year(control1_max_date) <- year(max_date_temp) - i
       year(control2_min_date) <- year(min_date_temp) + i
       year(control2_max_date) <- year(max_date_temp) + i 
+      if (year(control2_min_date) >= end_year){
+        year(control2_min_date) <- year(min_date_temp) - (i + 1)
+        year(control2_max_date) <- year(max_date_temp) - (i + 1)
+      }
       #if overlap exists, mark as 0 (if not, mark as 1)
       overlaps1 <- ifelse(control1_min_date <= same_zip_floods_wo_rowk$max_date & same_zip_floods_wo_rowk$min_date <= control1_max_date, 0, 1)
       overlaps2 <- ifelse(control2_min_date <= same_zip_floods_wo_rowk$max_date & same_zip_floods_wo_rowk$min_date <= control2_max_date, 0, 1)
@@ -212,7 +178,9 @@ for (i in 1:nrow(control_dates_df)){
   dates2 <- seq(as.Date(control_dates_df$control2_start[i]), as.Date(control_dates_df$control2_end[i]), by = "days")
   control_dates_expanded <- c(dates1, dates2)
   floodzip_id <- rep(control_dates_df$floodzip_id[i], length(control_dates_expanded))
-  zipcode_flood_control_array_week <- rbind(zipcode_flood_control_array_week, cbind(floodzip_id, control_dates_expanded))
+  #control1 == 1 --> control, control2 == 2 --> control
+  control_indicator <- c(rep(1, length(control_dates_expanded)/2), rep(2, length(control_dates_expanded)/2))
+  zipcode_flood_control_array_week <- rbind(zipcode_flood_control_array_week, cbind(floodzip_id, control_dates_expanded, control_indicator))
 }
 
 zipcode_flood_control_array_week$control_dates_expanded <- as.Date(as.numeric(zipcode_flood_control_array_week$control_dates_expanded), origin = "1970-01-01")
@@ -228,29 +196,23 @@ zipcode_flood_control_array_week$year <- lubridate::year(zipcode_flood_control_a
 zipcode_flood_control_array_week$month <- lubridate::month(zipcode_flood_control_array_week$control_dates_expanded)
 zipcode_flood_control_array_week$day <- lubridate::day(zipcode_flood_control_array_week$control_dates_expanded)
 
-#simplify into one step 
-zipcode_flood_control_array_week <- zipcode_flood_control_array_week[,c(1,11,2,8:10,3:7)]
 
+#simplify into one step 
+zipcode_flood_control_array_week <- zipcode_flood_control_array_week[,c(1,9,2,10:12,4:8,3)]
 zipcode_flood_control_array_week <- rename(zipcode_flood_control_array_week, date = control_dates_expanded)
 
+saveRDS(zipcode_flood_control_array_week, "zipcode_flood_control_array_week_2000_2016.rds")
+
+
 zipcode_flood_semifinal_array_week <- rbind(zipcode_flood_control_array_week, zipcode_flood_exp_lag_array_week)
-  
-#control == 1 --> control, control == 0 --> flood (exposure/lag)
-zipcode_flood_semifinal_array_week$control <- ifelse(zipcode_flood_semifinal_array_week$event_exposed == 1 |
-                                          zipcode_flood_semifinal_array_week$event_lagwk1 == 1 |
-                                          zipcode_flood_semifinal_array_week$event_lagwk2 == 1 |
-                                          zipcode_flood_semifinal_array_week$event_lagwk3 == 1 |
-                                          zipcode_flood_semifinal_array_week$event_lagwk4 == 1, 0, 1)
 
 zipcode_flood_semifinal_array_week <- zipcode_flood_semifinal_array_week[order(zipcode_flood_semifinal_array_week$floodzip_id, zipcode_flood_semifinal_array_week$date),]
 rownames(zipcode_flood_semifinal_array_week) <- c(1:nrow(zipcode_flood_semifinal_array_week))
-
-zipcode_flood_semifinal_array_week <- zipcode_flood_semifinal_array_week[,c(1,4,3,5,6,2,7:11)]
+saveRDS(zipcode_flood_semifinal_array_week, "zipcode_flood_semifinal_array_week_2000_2016.rds")
 
 #merge with medicare data here by zipcode, year, month, day 
 
-# need to modify aggregation to be done for each flood-zipcode combo by exposure + lag, control 1, control 2
-# zipcode_flood_array_week_aggregated_outcome <- zipcode_flood_semifinal_array_week %>% group_by(floodzip_id) %>% 
+# zipcode_flood_array_week_aggregated_outcome <- zipcode_flood_semifinal_array_week %>% group_by(floodzip_id, control_indicator) %>% 
 #                                                 summarise(exposed = sum(outcome * event_exposed),
 #                                                           lag_wk1 = sum(outcome * event_lagwk1),
 #                                                           lag_wk2 = sum(outcome * event_lagwk2),
