@@ -118,12 +118,15 @@ zipcode_flood_summarized_date_array <- zipcode_flood_exp_lag_array_week %>%
 zipcode_flood_summarized_date_array$zipcode <- as.numeric(substr(zipcode_flood_summarized_date_array$floodzip_id, 15, 20))
 saveRDS(zipcode_flood_summarized_date_array, "zipcode_flood_summarized_date_array_2000_2016.rds")
 
+zipcode_flood_summarized_date_array <- readRDS("zipcode_flood_summarized_date_array_2000_2016.rds")
+
 #for each year, change the year to be a different year in dataset then compare each control to original set of floods within that specific zipcode
 #if overlaps = 0, if no overlap = 1 --> pick closest to the year of flood and then add all dates within bound to array
 #for these floods, we did not have to consider any other years besides previous and after (might be different when we expand years)
 
 control_dates_df <- c()
-i <- 1
+
+for (i in c(1:5)){
   for (j in all_zips){
     same_zip_floods <- zipcode_flood_summarized_date_array %>% 
                           filter(zipcode == j)
@@ -135,51 +138,192 @@ i <- 1
                              filter(!row_number() %in% k)
       year(control1_min_date) <- year(min_date_temp) - i
       year(control1_max_date) <- year(max_date_temp) - i
-      year(control2_min_date) <- year(min_date_temp) + i
-      year(control2_max_date) <- year(max_date_temp) + i 
-      if (year(control2_min_date) >= end_year){
-        year(control2_min_date) <- year(min_date_temp) - (i + 1)
-        year(control2_max_date) <- year(max_date_temp) - (i + 1)
-      }
       #if overlap exists, mark as 0 (if not, mark as 1)
       overlaps1 <- ifelse(control1_min_date <= same_zip_floods_wo_rowk$max_date & same_zip_floods_wo_rowk$min_date <= control1_max_date, 0, 1)
-      overlaps2 <- ifelse(control2_min_date <= same_zip_floods_wo_rowk$max_date & same_zip_floods_wo_rowk$min_date <= control2_max_date, 0, 1)
       #if any value in overlap vector is 0, mark as 0 (i.e. cannot be counted as a control)
       any_overlaps_control1 <- ifelse(any(overlaps1 == 0), 0, 1)
-      any_overlaps_control2 <- ifelse(any(overlaps2 == 0), 0, 1)
       if (any_overlaps_control1 == 1){
         control1_dates <- c(control1_min_date, control1_max_date)
       }
+      else {
+        control1_dates <- c(NA,NA)
+      }
+      year(control2_min_date) <- year(min_date_temp) + i
+      year(control2_max_date) <- year(max_date_temp) + i
+      #if overlap exists, mark as 0 (if not, mark as 1)
+      overlaps2 <- ifelse(control2_min_date <= same_zip_floods_wo_rowk$max_date & same_zip_floods_wo_rowk$min_date <= control2_max_date, 0, 1)
+      #if any value in overlap vector is 0, mark as 0 (i.e. cannot be counted as a control)
+      any_overlaps_control2 <- ifelse(any(overlaps2 == 0), 0, 1)
       if (any_overlaps_control2 == 1){
         control2_dates <- c(control2_min_date, control2_max_date)
       }
-      # if (any_overlaps_control1 == 0 | any_overlaps_control1 == 0){
-      #   i <- i + 1
-      # }
-      final_row <- c(id_temp, control1_dates, control2_dates)
+      else {
+        control2_dates <- c(NA,NA)
+      }
+      final_row <- c(id_temp, i, control1_dates, control2_dates)
       control_dates_df <- rbind(control_dates_df, final_row)
     }
-  } 
-
+  }
+}
 control_dates_df <- as.data.frame(control_dates_df)
-control_dates_df$V2 <- as.Date(as.numeric(control_dates_df$V2), origin = "1970-01-01")
+saveRDS(control_dates_df, "control_dates_df.rds")
+
+#preliminary data frame -- need to remove those with years outside of 2000:2016 and identify two controls 
+control_dates_df <- readRDS("control_dates_df.rds")
+
 control_dates_df$V3 <- as.Date(as.numeric(control_dates_df$V3), origin = "1970-01-01")
 control_dates_df$V4 <- as.Date(as.numeric(control_dates_df$V4), origin = "1970-01-01")
 control_dates_df$V5 <- as.Date(as.numeric(control_dates_df$V5), origin = "1970-01-01")
-colnames(control_dates_df) <- c("floodzip_id", "control1_start", "control1_end", "control2_start", "control2_end")
+control_dates_df$V6 <- as.Date(as.numeric(control_dates_df$V6), origin = "1970-01-01")
+
+control_dates_df$V3 <- ifelse(year(control_dates_df$V3) < 2000, NA, control_dates_df$V3)
+control_dates_df$V4 <- ifelse(year(control_dates_df$V4) < 2000, NA, control_dates_df$V4)
+control_dates_df$V5 <- ifelse(year(control_dates_df$V5) > 2016, NA, control_dates_df$V5)
+control_dates_df$V6 <- ifelse(year(control_dates_df$V6) > 2016, NA, control_dates_df$V6)
+
+#one flood added controls in December 2016 that carry into January 2017 which we don't have data for (important because it is the first row looked at)
+control_dates_df$V5 <- ifelse(control_dates_df$V5 == 17150, NA, control_dates_df$V5)
+
+control_dates_df$V3 <- as.Date(as.numeric(control_dates_df$V3), origin = "1970-01-01")
+control_dates_df$V4 <- as.Date(as.numeric(control_dates_df$V4), origin = "1970-01-01")
+control_dates_df$V5 <- as.Date(as.numeric(control_dates_df$V5), origin = "1970-01-01")
+control_dates_df$V6 <- as.Date(as.numeric(control_dates_df$V6), origin = "1970-01-01")
+
+colnames(control_dates_df) <- c("floodzip_id", "i","control1_start", "control1_end", "control2_start", "control2_end")
 control_dates_df <- control_dates_df[order(control_dates_df$floodzip_id),]
 rownames(control_dates_df) <- c(1:nrow(control_dates_df))
 
+blocks = seq(from=1, to = nrow(control_dates_df), by=5)
+best.pairs1 <- matrix(0, nrow = 92202, ncol = 2, byrow = TRUE)
+best.pairs2 <- matrix(0, nrow = 92202, ncol = 2, byrow = TRUE)
+best.pairs3 <- matrix(0, nrow = 92202, ncol = 2, byrow = TRUE)
+
+cntr <- 1 
+for(h in blocks){
+  if(cntr %% 5000 == 0) {
+    print(cntr)
+  }
+  block = control_dates_df[h:(h+5),]
+  v1 <- !is.na(block$control1_start)
+  v2 <- !is.na(block$control2_start)
+  best.dist1 <- Inf
+  best.pair1 <- c(NA,NA)
+  for (i in 1:5){
+    for (j in 1:5) {
+      if(v1[i] & v2[j]) {
+        if(abs(i-j) < best.dist1) {
+          best.pair1 <- c(i,j)
+          best.dist1 <- abs(i-j)
+        }
+      }
+    }
+  }
+  
+  best.pairs1[cntr,] <- best.pair1
+
+#Both in column1
+  v1 <- !is.na(block$control1_start)
+  v2 <- !is.na(block$control1_start)
+  best.dist2 <- Inf
+  best.pair2 <- c(NA,NA)
+  for (i in 1:5){
+    for (j in 1:5) {
+      if((v1[i] & v2[j]) & i != j) {
+        if(abs(i-j) < best.dist2) {
+          best.pair2 <- c(i,j)
+          best.dist2 <- abs(i-j)
+        }
+      }
+    }
+  }
+  
+  best.pairs2[cntr,] <- best.pair2
+
+#Both in column2
+
+  v1 <- !is.na(block$control2_start)
+  v2 <- !is.na(block$control2_start)
+  best.dist3 <- Inf
+  best.pair3 <- c(NA,NA)
+  for (i in 1:5){
+    for (j in 1:5) {
+      if((v1[i] & v2[j]) & i != j) {
+        if(abs(i-j) < best.dist3) {
+          best.pair3 <- c(i,j)
+          best.dist3 <- abs(i-j)
+        }
+      }
+    }
+  }
+  
+  
+  best.pairs3[cntr,] <- best.pair3
+  cntr <- cntr + 1 
+}
+
+best.pairs <- as.data.frame(cbind(best.pairs1,best.pairs2,best.pairs3))
+best.pairs.identifier <- best.pairs %>% summarise(pair1 = best.pairs$V1 + best.pairs$V2,
+                                       pair2 = best.pairs$V3 + best.pairs$V4,
+                                       pair3 = best.pairs$V5 + best.pairs$V6)
+best.pairs.identifier$min <- apply(best.pairs.identifier, 1, FUN = min, na.rm = TRUE)
+
+best.pairs.identifier[is.na(best.pairs.identifier)] <- 0
+best.pairs.identifier$floodzip_id <- zipcode_flood_summarized_date_array$floodzip_id
+
+control_dates_df_final <- c()
+for (k in 1:nrow(best.pairs.identifier)){
+  subset <- control_dates_df %>% filter(floodzip_id == best.pairs.identifier$floodzip_id[k])
+  if (best.pairs.identifier$min[k] == best.pairs.identifier$pair1[k]){
+    index1 <- best.pairs[k,1]
+    index2 <- best.pairs[k,2]
+    cont1 <- c(subset[index1, 3], subset[index1, 4])
+    cont2 <- c(subset[index2, 5], subset[index2, 6])
+  }
+  else if (best.pairs.identifier$min[k] == best.pairs.identifier$pair2[k]){
+    index1 <- best.pairs[k,3]
+    index2 <- best.pairs[k,4]
+    cont1 <- c(subset[index1,3], subset[index1,4])
+    cont2 <- c(subset[index2,3], subset[index2,4])
+  }
+  else if (best.pairs.identifier$min[k] == best.pairs.identifier$pair3[k]){
+    index1 <- best.pairs[k,5]
+    index2 <- best.pairs[k,6]
+    cont1 <- c(subset[index1,5], subset[index1,6])
+    cont2 <- c(subset[index2,5], subset[index2,6])
+  }
+  else {
+    print("yikes")
+  }
+  final <- c(best.pairs.identifier$floodzip_id[k],cont1, cont2)
+  control_dates_df_final <- rbind(control_dates_df_final, final)
+}
+
+control_dates_df_final <- as.data.frame(control_dates_df_final)
+control_dates_df_final$V2 <- as.Date(as.numeric(control_dates_df_final$V2), origin = "1970-01-01")
+control_dates_df_final$V3 <- as.Date(as.numeric(control_dates_df_final$V3), origin = "1970-01-01")
+control_dates_df_final$V4 <- as.Date(as.numeric(control_dates_df_final$V4), origin = "1970-01-01")
+control_dates_df_final$V5 <- as.Date(as.numeric(control_dates_df_final$V5), origin = "1970-01-01")
+
+colnames(control_dates_df_final) <- c("floodzip_id", "control1_start", "control1_end", "control2_start", "control2_end")
+control_dates_df_final <- control_dates_df_final[order(control_dates_df_final$floodzip_id),]
+rownames(control_dates_df_final) <- c(1:nrow(control_dates_df_final))
+
+saveRDS(control_dates_df_final, "control_dates_df_final.rds")
+
 zipcode_flood_control_array_week <- data.frame()
 
+#flood 2167, 2177 found controls in 2002 and 2004, but 2004 is a leap year so should we go to 2001/2005? or remove the 29th of February? 
 #this is slow 
-for (i in 1:nrow(control_dates_df)){
-  dates1 <- seq(as.Date(control_dates_df$control1_start[i]), as.Date(control_dates_df$control1_end[i]), by = "days")
-  dates2 <- seq(as.Date(control_dates_df$control2_start[i]), as.Date(control_dates_df$control2_end[i]), by = "days")
+for (i in 1:nrow(control_dates_df_final)){
+  dates1 <- seq(as.Date(control_dates_df_final$control1_start[i]), as.Date(control_dates_df_final$control1_end[i]), by = "day")
+  dates2 <- seq(as.Date(control_dates_df_final$control2_start[i]), as.Date(control_dates_df_final$control2_end[i]), by = "day")
+  if (length(dates2) > length(dates1)){
+    dates2 <- dates2[1:length(dates1)]
+  }
   control_dates_expanded <- c(dates1, dates2)
-  floodzip_id <- rep(control_dates_df$floodzip_id[i], length(control_dates_expanded))
+  floodzip_id <- rep(control_dates_df_final$floodzip_id[i], length(control_dates_expanded))
   #control1 == 1 --> control, control2 == 2 --> control
-  control_indicator <- c(rep(1, length(control_dates_expanded)/2), rep(2, length(control_dates_expanded)/2))
+  control_indicator <- c(rep(1, length(dates1)), rep(2, length(dates2)))
   zipcode_flood_control_array_week <- rbind(zipcode_flood_control_array_week, cbind(floodzip_id, control_dates_expanded, control_indicator))
 }
 
@@ -203,28 +347,33 @@ zipcode_flood_control_array_week <- rename(zipcode_flood_control_array_week, dat
 
 saveRDS(zipcode_flood_control_array_week, "zipcode_flood_control_array_week_2000_2016.rds")
 
+#------------------------------------------------------------------------------
+#Modify below in order to successfully merge and aggregate with Medicare data 
+zipcode_flood_control_array_week <- readRDS("~/Desktop/HARVARD/Spring2022/IndStudy/GFD_USA/zipcode_flood_control_array_week_2000_2016.rds")
+zipcode_flood_exp_lag_array_week <- readRDS("~/Desktop/HARVARD/Spring2022/IndStudy/GFD_USA/zipcode_flood_exp_lag_array_week_2000_2016.rds")
 
-zipcode_flood_semifinal_array_week <- rbind(zipcode_flood_control_array_week, zipcode_flood_exp_lag_array_week)
+zipcode_flood_control_array_week$date <- NULL
+zipcode_flood_exp_lag_array_week$date <- NULL
 
-zipcode_flood_semifinal_array_week <- zipcode_flood_semifinal_array_week[order(zipcode_flood_semifinal_array_week$floodzip_id, zipcode_flood_semifinal_array_week$date),]
-rownames(zipcode_flood_semifinal_array_week) <- c(1:nrow(zipcode_flood_semifinal_array_week))
+zipcode_flood_exp_lag_array_week$control_exposed <- 0
+zipcode_flood_exp_lag_array_week$control_lagwk1 <- 0
+zipcode_flood_exp_lag_array_week$control_lagwk2 <- 0
+zipcode_flood_exp_lag_array_week$control_lagwk3 <- 0
+zipcode_flood_exp_lag_array_week$control_lagwk4 <- 0
+
+cols_to_duplicate <- zipcode_flood_exp_lag_array_week %>% 
+  select(c(floodzip_id, zipcode, event_exposed,event_lagwk1,event_lagwk2,event_lagwk3,event_lagwk4))
+
+full_df <- rbind(cols_to_duplicate, cols_to_duplicate)
+colnames(full_df) <- c("floodzip_id2", "zipcode2", "control_exposed", "control_lagwk1", "control_lagwk2", "control_lagwk3", "control_lagwk4")
+full_df <- full_df[order(full_df$floodzip_id2),]
+zipcode_flood_control_array_week <- cbind(zipcode_flood_control_array_week, full_df)
+zipcode_flood_control_array_week <- subset(zipcode_flood_control_array_week , select = -c(floodzip_id2, zipcode2))
+
+zipcode_flood_semifinal_array_week <- rbind(zipcode_flood_exp_lag_array_week, zipcode_flood_control_array_week)
+
+zipcode_flood_semifinal_array_week <- zipcode_flood_semifinal_array_week[order(zipcode_flood_semifinal_array_week$floodzip_id),]
+zipcode_flood_semifinal_array_week <- zipcode_flood_semifinal_array_week[,c(1:10,12:16,11)]
 saveRDS(zipcode_flood_semifinal_array_week, "zipcode_flood_semifinal_array_week_2000_2016.rds")
 
-#merge with medicare data here by zipcode, year, month, day 
 
-# zipcode_flood_array_week_aggregated_outcome <- zipcode_flood_semifinal_array_week %>% group_by(floodzip_id, control_indicator) %>% 
-#                                                 summarise(exposed = sum(outcome * event_exposed),
-#                                                           lag_wk1 = sum(outcome * event_lagwk1),
-#                                                           lag_wk2 = sum(outcome * event_lagwk2),
-#                                                           lag_wk3 = sum(outcome * event_lagwk3),
-#                                                           lag_wk4 = sum(outcome * event_lagwk4))
-
-# #merge the aggregated outcomes by flood-zip id
-# zipcode_flood_final_array_week <- merge(zipcode_flood_semifinal_array_week, zipcode_flood_array_week_aggregated_outcome, 
-#                                        by = "floodzip_id")
-
-#zipcode_flood_final_array_week$floodzip_id <- NULL
-#zipcode_flood_final_array_week$date <- NULL
-
-# save as rds for analysis
-#saveRDS(zipcode_flood_final_array_week, paste0(dir.output,'zipcode_flood_lag_array_week_',start_year,'_',end_year,'.rds'))
