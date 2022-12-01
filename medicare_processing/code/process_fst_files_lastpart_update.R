@@ -58,7 +58,8 @@ dat.denom = dat.denom[,c('year','zip','population')]
 
 zipcode_flood_semifinal_array_week <- readRDS('/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/medicare_processing/data_update/zipcode_flood_semifinal_array_week_2000_2016.rds')
 
-dat.denom.exposure = merge(zipcode_flood_semifinal_array_week,dat.denom, by.x =c('year','zipcode'), by.y = c('year', 'zip'), all.x = TRUE)
+#dat.denom.exposure = merge(zipcode_flood_semifinal_array_week,dat.denom, by.x =c('year','zipcode'), by.y = c('year', 'zip'), all.x = TRUE)
+dat.denom.exposure <- left_join(zipcode_flood_semifinal_array_week,dat.denom, by = c("year" = "year", "zipcode" = "zip"))
 dat.denom.exposure$population <- ifelse(is.na(dat.denom.exposure$population)==TRUE,0,dat.denom.exposure$population)
 print("lag array merged with medicare denominator")
 
@@ -76,8 +77,9 @@ zipcode_flood_week_aggregated_population <- dat.denom.exposure %>% group_by(floo
 
 
 #merge the aggregated outcomes by flood-zip id and control_indicator
-dat.denom.exposure.aggregate <- merge(dat.denom.exposure, zipcode_flood_week_aggregated_population, 
-                                      by = c("floodzip_id", "control_indicator"))
+# dat.denom.exposure.aggregate <- merge(dat.denom.exposure, zipcode_flood_week_aggregated_population, 
+#                                       by = c("floodzip_id", "control_indicator"))
+dat.denom.exposure.aggregate <- inner_join(dat.denom.exposure, zipcode_flood_week_aggregated_population, by = c("floodzip_id", "control_indicator"))
 
 print("aggregate population merged with lag array + medicare denom")
 
@@ -134,7 +136,8 @@ category = ccs_category_descs[seedVal]
   
   # filter out single ccs category
   dat.single = subset(dat.admissions,category_code==category)
-  dat.complete = merge(zipcode_flood_semifinal_array_week, dat.single, by = c("zipcode", "year", "month", "day"), all.x = TRUE)
+  #dat.complete = merge(zipcode_flood_semifinal_array_week, dat.single, by = c("zipcode", "year", "month", "day"), all.x = TRUE)
+  dat.complete <- left_join(zipcode_flood_semifinal_array_week,dat.single, by = c("zipcode", "year", "month", "day"))
   dat.complete$cases <- ifelse(is.na(dat.complete$cases)==TRUE,0,dat.complete$cases)
   
   print("lag array merged with medicare admissions")
@@ -152,8 +155,10 @@ category = ccs_category_descs[seedVal]
               control_lag_wk4_cases = sum(cases * control_lagwk4))
   
   #merge the aggregated outcomes by flood-zip id and control_indicator
-  dat.admissions.exposure.aggregate <- merge(dat.complete, zipcode_flood_week_aggregated_cases, 
-                                             by = c("floodzip_id", "control_indicator"))
+  # dat.admissions.exposure.aggregate <- merge(dat.complete, zipcode_flood_week_aggregated_cases, 
+  #                                            by = c("floodzip_id", "control_indicator"))
+  dat.admissions.exposure.aggregate <- inner_join(dat.complete, zipcode_flood_week_aggregated_cases, 
+                                                  by = c("floodzip_id", "control_indicator"))
   
   print("aggregate cases merged with lag array + medicare admissions")
   
@@ -183,9 +188,12 @@ category = ccs_category_descs[seedVal]
   dat.admissions.exposure.update$control_lag_wk3_cases <- NULL
   dat.admissions.exposure.update$control_lag_wk4_cases <- NULL
   
-  dat.merged <- merge(dat.admissions.exposure.update[,c(floodzip_id, zipcode, year, month, day, event_exposed, event_lagwk1, event_lagwk2, event_lagwk3, event_lagwk4, control_indicator, cases_final)], 
-                      dat.denom.exposure.update, 
-                      by = c("floodzip_id"))
+  # dat.merged <- merge(dat.admissions.exposure.update[,c(floodzip_id, zipcode, year, month, day, event_exposed, event_lagwk1, event_lagwk2, event_lagwk3, event_lagwk4, control_indicator, cases_final)], 
+  #                     dat.denom.exposure.update, 
+  #                     by = c("floodzip_id"))
+  dat.merged <- inner_join(dat.admissions.exposure.update[,c(floodzip_id, zipcode, year, month, day, event_exposed, event_lagwk1, event_lagwk2, event_lagwk3, event_lagwk4, control_indicator, cases_final)], 
+                                                dat.denom.exposure.update, 
+                                                by = c("floodzip_id"))
   
   print("admissions merged with denom")
   nrow(dat.merged)
