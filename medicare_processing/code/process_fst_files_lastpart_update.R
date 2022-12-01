@@ -108,7 +108,7 @@ dat.denom.exposure.update$control_lag_wk2_pt <- NULL
 dat.denom.exposure.update$control_lag_wk3_pt <- NULL
 dat.denom.exposure.update$control_lag_wk4_pt <- NULL
 
-dat.denom.exposure.update <- dat.denom.exposure.update[,c(floodzip_id, pt_final)]
+dat.denom.exposure.update <- dat.denom.exposure.update[,c('floodzip_id', 'pt_final')]
 saveRDS(dat.denom.exposure.update, "/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/medicare_processing/data_update/dat.denom.exposure.update.rds")
 
 # isolate a particular cause of hospitalisations
