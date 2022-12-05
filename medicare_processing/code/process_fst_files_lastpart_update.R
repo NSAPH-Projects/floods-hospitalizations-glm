@@ -49,7 +49,14 @@ library(dplyr)
 
 zipcode_flood_semifinal_array_week <- readRDS('/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/medicare_processing/data_update/zipcode_flood_semifinal_array_week_2000_2016.rds')
 
+<<<<<<< HEAD
 # 3. MERGE CASES AND DENOM FILES
+=======
+#dat.denom.exposure = merge(zipcode_flood_semifinal_array_week,dat.denom, by.x =c('year','zipcode'), by.y = c('year', 'zip'), all.x = TRUE)
+dat.denom.exposure <- left_join(zipcode_flood_semifinal_array_week,dat.denom, by = c("year" = "year", "zipcode" = "zip"))
+dat.denom.exposure$population <- ifelse(is.na(dat.denom.exposure$population)==TRUE,0,dat.denom.exposure$population)
+print("lag array merged with medicare denominator")
+>>>>>>> fce4cbbe2a85a31bed634b1c75bc0b4e131a9540
 
 # dat.denom$zip = as.numeric(dat.denom$zip)
 # dat.denom = dat.denom[,c('year','zip','population')]
@@ -108,8 +115,46 @@ zipcode_flood_semifinal_array_week <- readRDS('/n/dominici_nsaph_l3/Lab/projects
 # dat.denom.exposure.update <- dat.denom.exposure.update[,c('floodzip_id', 'zipcode', 'year', 'month', 'day', 'event_exposed', 'event_lagwk1', 'event_lagwk2', 'event_lagwk3', 'event_lagwk4', 'control_indicator', 'pt_final')]
 # saveRDS(dat.denom.exposure.update, "/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/medicare_processing/data_update/dat.denom.exposure.update.rds")
 
+<<<<<<< HEAD
 # head(dat.denom.exposure.update)
 dat.denom.exposure.update <- readRDS("/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/medicare_processing/data_update/dat.denom.exposure.update.rds")
+=======
+
+#merge the aggregated outcomes by flood-zip id and control_indicator
+# dat.denom.exposure.aggregate <- merge(dat.denom.exposure, zipcode_flood_week_aggregated_population, 
+#                                       by = c("floodzip_id", "control_indicator"))
+dat.denom.exposure.aggregate <- inner_join(dat.denom.exposure, zipcode_flood_week_aggregated_population, by = c("floodzip_id", "control_indicator"))
+
+print("aggregate population merged with lag array + medicare denom")
+
+#keep exp version for control_indicator == 0, control version for control_indicator == 1, 2
+dat.denom.exposure.update <- dat.denom.exposure.aggregate %>% mutate(pt_final = case_when(event_exposed == 1 ~ exp_pt,
+                                                                                          event_lagwk1 == 1 ~ exp_lag_wk1_pt,
+                                                                                          event_lagwk2 == 1 ~ exp_lag_wk2_pt,
+                                                                                          event_lagwk3 == 1 ~ exp_lag_wk3_pt,
+                                                                                          event_lagwk4 == 1 ~ exp_lag_wk4_pt,
+                                                                                          control_exposed == 1 ~ control_pt,
+                                                                                          control_lagwk1 == 1 ~ control_lag_wk1_pt,
+                                                                                          control_lagwk2 == 1 ~ control_lag_wk2_pt,
+                                                                                          control_lagwk3 == 1 ~ control_lag_wk3_pt,
+                                                                                          control_lagwk4 == 1 ~ control_lag_wk4_pt))
+
+print("kept person-time respective to indicator variables")
+
+dat.denom.exposure.update$exp_pt <- NULL
+dat.denom.exposure.update$exp_lag_wk1_pt <- NULL
+dat.denom.exposure.update$exp_lag_wk2_pt <- NULL
+dat.denom.exposure.update$exp_lag_wk3_pt <- NULL
+dat.denom.exposure.update$exp_lag_wk4_pt <- NULL
+dat.denom.exposure.update$control_pt <- NULL
+dat.denom.exposure.update$control_lag_wk1_pt <- NULL
+dat.denom.exposure.update$control_lag_wk2_pt <- NULL
+dat.denom.exposure.update$control_lag_wk3_pt <- NULL
+dat.denom.exposure.update$control_lag_wk4_pt <- NULL
+
+dat.denom.exposure.update <- dat.denom.exposure.update[,c('floodzip_id', 'pt_final')]
+saveRDS(dat.denom.exposure.update, "/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/medicare_processing/data_update/dat.denom.exposure.update.rds")
+>>>>>>> fce4cbbe2a85a31bed634b1c75bc0b4e131a9540
 
 # isolate a particular cause of hospitalisations
 ccs_category_descs = sort(unique(dat.admissions$category_code))
@@ -191,6 +236,7 @@ category = ccs_category_descs[seedVal]
   # dat.merged <- merge(dat.admissions.exposure.update[,c(floodzip_id, zipcode, year, month, day, event_exposed, event_lagwk1, event_lagwk2, event_lagwk3, event_lagwk4, control_indicator, cases_final)], 
   #                     dat.denom.exposure.update, 
   #                     by = c("floodzip_id"))
+<<<<<<< HEAD
   #dat.merged <- inner_join(dat.admissions.exposure.update, dat.denom.exposure.update, by = c("floodzip_id"))
   dat.admissions.exposure.update <- dat.admissions.exposure.update[,c('floodzip_id', 'zipcode', 'year', 'month', 'day', 'event_exposed', 'event_lagwk1', 'event_lagwk2', 'event_lagwk3', 'event_lagwk4', 'control_indicator', 'cases_final')]
   
@@ -198,6 +244,11 @@ category = ccs_category_descs[seedVal]
   dat.denom.exposure.update_dt <- as.data.table(dat.denom.exposure.update)
   dat.admissions.exposure.update_dt <- as.data.table(dat.admissions.exposure.update)
   dat.merged_dt <- data.table::merge.data.table(dat.admissions.exposure.update_dt, dat.denom.exposure.update_dt, by = c("floodzip_id",'zipcode', 'year', 'month', 'day', 'event_exposed', 'event_lagwk1', 'event_lagwk2', 'event_lagwk3', 'event_lagwk4', 'control_indicator'))
+=======
+  dat.merged <- inner_join(dat.admissions.exposure.update[,c(floodzip_id, zipcode, year, month, day, event_exposed, event_lagwk1, event_lagwk2, event_lagwk3, event_lagwk4, control_indicator, cases_final)], 
+                                                dat.denom.exposure.update, 
+                                                by = c("floodzip_id"))
+>>>>>>> fce4cbbe2a85a31bed634b1c75bc0b4e131a9540
   
   print("admissions merged with denom")
   
