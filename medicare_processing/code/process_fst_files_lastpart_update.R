@@ -113,6 +113,10 @@ ccs.categories <- unique.data.frame(ccs.categories)
 names(ccs.categories) = c('category_code','full_diag_name')
 ccs.categories$full_diag_name = as.character(ccs.categories$full_diag_name)
 
+#missing zipcodes
+zipcode_denom_missing <- readRDS('/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/medicare_processing/data_update/zipcodes_in_exposure_not_in_denom.rds')
+
+
 # output directory
 dir.output = paste0('/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/medicare_processing/data_update/expanded_grid_hospitalisations/',years[1],'_',years[length(years)],'/')
 ifelse(!dir.exists(dir.output), dir.create(dir.output, recursive=TRUE), FALSE)
@@ -188,24 +192,26 @@ category = ccs_category_descs[seedVal]
   print(dat.merged[1:100,])
 
   indicator_array_ind <- rbind(diag(5), matrix(data = 0, nrow = 5, ncol = 5,), matrix(data = 0, nrow = 5, ncol = 5)) 
-  indicator_array <- do.call(rbind, replicate(nrow(dat.merged)/3, indicator_array_ind, simplify = FALSE))
+  indicator_array <- do.call(rbind, replicate(nrow(dat.merged)/15, indicator_array_ind, simplify = FALSE))
   indicator_array <- as.data.frame(indicator_array)
   colnames(indicator_array) <- c("exposed", "lag_wk1", "lag_wk2", "lag_wk3", "lag_wk4")
   dat.complete <- cbind(dat.merged, indicator_array)
   #computed rate function doesn't work but is not necessary, will ignore for now
-  dat.complete$rate <- ifelse(dat.complete$pt == 0, NA, dat.complete$cases_agg/dat.complete$pt)
+  # dat.complete$rate <- ifelse(dat.complete$pt == 0, NA, dat.complete$cases_agg/dat.complete$pt)
   
-  print("computed rate")
+  #print("computed rate")
   
-  dat.complete <- dat.complete[,c(1,5,6,2,7,8,9,10,11,3,4,12)]
-  head(dat.complete)
+  dat.complete <- dat.complete[,c(1,5,6,2,7,8,9,10,11,3,4)]
+  nrow(dat.complete)
   
-  #returns NA because some rates are NA because pt_final = 0 
-  #any(dat.merged$rate > 1) 
-  saveRDS(dat.complete, paste0(dir.output,'medicare_',gsub(" ", "_", full_diag_name),'_rates_expanded_grid_hospitalisations_',years[1],'_',years[length(years)],'.rds'))
+  dat.complete.noNA <- dat.complete[!(dat.complete$zipcode %in% c(zipcode_denom_missing$zip,"35898", "36112","72314","87750",
+  "57542", "57647", "57778" ,"62845" ,"58320" ,"77507", "39529", "38912" ,"72516" ,"87009", "87117", "93262" ,"95836", "29808", 
+  "32212" ,"32815", "23459", "23461" ,"23521", "23709", "27859" ,"28310", "92135" ,"92155", "92862" ,"93042", "26674" ,"59354",
+  "48710" ,"55455" ,"29632" ,"58319" ,"72105" ,"80913" ,"60037", "00005" ,"56740", "76949", "31314" ,"36113" ,"04549", "06433", "19112" ,
+  "58705", "36615", "15275" ,"92152", "36515", "41351" ,"72199" ,"72329")),]
   
-  #below gives no rows because rate is being computed as NA for all rows 
-  #dat.complete.noNA <- na.omit(dat.complete)  
-  #saveRDS(dat.complete.noNA, paste0(dir.output,'medicare_no_NA_',gsub(" ", "_", full_diag_name),'_rates_expanded_grid_hospitalisations_',years[1],'_',years[length(years)],'.rds'))
-  
+  nrow(dat.complete.noNA)
+  print(dat.complete.noNA[1:100,])
+
+  saveRDS(dat.complete.noNA, paste0(dir.output,'medicare_',gsub(" ", "_", full_diag_name),'_rates_',years[1],'_',years[length(years)],'.rds'))
   
