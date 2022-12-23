@@ -190,8 +190,10 @@ category = ccs_category_descs[seedVal]
   dat.merged$year <- year_df$year
   
   print(dat.merged[1:100,])
-
-  indicator_array_ind <- rbind(diag(5), matrix(data = 0, nrow = 5, ncol = 5,), matrix(data = 0, nrow = 5, ncol = 5)) 
+  
+  #we put indicators on the controls in order to aggregate in level 1 easier
+  indicator_array_ind <- rbind(diag(5), diag(5), diag(5)) 
+  #indicator_array_ind <- rbind(diag(5), matrix(data = 0, nrow = 5, ncol = 5,), matrix(data = 0, nrow = 5, ncol = 5)) 
   indicator_array <- do.call(rbind, replicate(nrow(dat.merged)/15, indicator_array_ind, simplify = FALSE))
   indicator_array <- as.data.frame(indicator_array)
   colnames(indicator_array) <- c("exposed", "lag_wk1", "lag_wk2", "lag_wk3", "lag_wk4")

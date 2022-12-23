@@ -1,0 +1,287 @@
+# this code will take a particular cause of death (CCS level 1)
+# and run the chosen model for it
+
+# NEED TO RUN ON RCE
+
+#SA edited from RMP - 7/8/2022
+
+rm(list=ls())
+
+# arguments from Rscript
+args <- commandArgs(trailingOnly=TRUE)
+seedVal = as.numeric(args[1])
+
+# for testing
+#seedVal = 1
+
+# years of analysis
+years = c(2000:2016)
+
+# load ccs lookup
+code.lookup.merged = read.csv('/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/medicare_processing/data_update/CCS_DX.csv')
+code.lookup.merged = subset(code.lookup.merged, !(code_chapter%in%c("Complications of pregnancy; childbirth; and the puerperium", 
+                                                                    "Congenital anomalies",
+                                                                    "Certain conditions originating in the perinatal period",
+                                                                    "Symptoms; signs; and ill-defined conditions and factors influencing health status",
+                                                                    "Residual codes; unclassified; all E codes [259. and 260.]")))
+
+# make list of broad causes of hospitalization (level 1 names)
+causes_groups = unique(as.character(code.lookup.merged$code_chapter))
+
+# process for finding broad causes of death and matching sub causes
+causes_group = causes_groups[seedVal]
+code.lookup.merged.subset = subset(code.lookup.merged, code_chapter==causes_group)
+causes_to_load = unique(as.character(code.lookup.merged.subset$category_desc))
+causes_to_load = trimws(causes_to_load)
+
+# directory to load data from
+dir.input = paste0('/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/medicare_processing/data_update/expanded_grid_hospitalisations/',years[1],'_',years[length(years)],'/')
+
+# CCS level 1 input file
+input.file = paste0(dir.input,'medicare_',gsub(" ", "_", causes_group),'_rates_',years[1],'_',years[length(years)],'.rds')
+
+# check to see if a file exists for the analysis
+if(file.exists(input.file)){
+    print('data already processed... loading...')
+    dat = readRDS(paste0(input.file))
+}
+
+# process if file doesn't already exists
+if(!file.exists(input.file)){
+
+    print('data not processed... processing now...')
+
+    # load hospitalizations data
+    dat.all = data.frame()
+    for(cod.arg in causes_to_load){
+        cod.arg = gsub(" ", "_", cod.arg) ; cod.arg = gsub("/", "_", cod.arg)
+        input.file.2 = paste0(dir.input,'medicare_',cod.arg,'_rates_',years[1],'_',years[length(years)],'.rds')
+        if(file.exists(input.file.2)){
+            print(cod.arg)
+            dat = readRDS(input.file.2)
+            print(head(dat))
+            dat.all=rbind(dat.all,dat)
+        }
+        if(!file.exists(input.file.2)){
+            print(paste0('Cannot find ', cod.arg, ', so skipping over...'))
+        }
+    }
+    
+    print(dat.all[1:30,])
+    # resummarise by CCS level 1
+    library(dplyr)
+
+    dat <- dat.all %>% group_by(floodzip_id, control_indicator) %>% mutate(cases_final = case_when(exposed == 1 ~ sum(exposed * cases),
+                                                                                lag_wk1 == 1 ~ sum(lag_wk1 * cases),
+                                                                                lag_wk2 == 1 ~ sum(lag_wk2 * cases),
+                                                                                lag_wk3 == 1 ~ sum(lag_wk3 * cases),
+                                                                                lag_wk4 == 1 ~ sum(lag_wk4 * cases)))
+    dat <- as.data.frame(dat)
+    dat <- dat %>% select(-c(cases))
+    dat <- unique.data.frame(dat)
+    print(dat[1:30,])
+    
+    #change back to correct array (control rows are 0 all the way across)
+    dat$exposed <- ifelse(dat$control_indicator == 1 | dat$control_indicator == 2, 0, dat$exposed)
+    dat$lag_wk1 <- ifelse(dat$control_indicator == 1 | dat$control_indicator == 2, 0, dat$lag_wk1)
+    dat$lag_wk2 <- ifelse(dat$control_indicator == 1 | dat$control_indicator == 2, 0, dat$lag_wk2)
+    dat$lag_wk3 <- ifelse(dat$control_indicator == 1 | dat$control_indicator == 2, 0, dat$lag_wk3)
+    dat$lag_wk4 <- ifelse(dat$control_indicator == 1 | dat$control_indicator == 2, 0, dat$lag_wk4)
+        
+    # load for future attempts so do not need to waste lots of time processing data again
+    saveRDS(dat,input.file)
+
+    # get rid to save space
+    rm(dat.all)
+}
+
+# # attach temperature data 
+# print('attaching weather data')
+# dat.temp = data.frame()
+# dir.input.weather = "/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/data/temperature_data/"
+# for(year in years){
+#     dat.temp.current=readRDS(paste0(dir.input.weather ,'weighted_area_raster_fips_tmean_daily_',as.character(year),'.rds'))
+#     dat.temp = rbind(dat.temp,dat.temp.current)
+#     print(year)
+# }
+# dat.temp = dat.temp[,c(1,2,4:6)]
+# dat.temp$fips = as.numeric(as.character(dat.temp$fips))
+# dat.temp$day = as.numeric(as.character(dat.temp$day)) 
+# dat.temp$month = as.numeric(as.character(dat.temp$month))
+# dat.temp$year = as.numeric(as.character(dat.temp$year))
+
+# print('merging weather data with hospitalization data')
+# dat = merge(dat,dat.temp,by.x=c('fipscounty','day','month','year'),by.y=c('fips','day','month','year'),all.x=TRUE)
+
+# print('preview of merged data to check')
+# head(dat)
+
+# sample for model testing
+# dat.sample = subset(dat,year%in%years)
+
+dat.sample <- dat
+
+# add date info 
+#library(lubridate)
+#dat.sample$date = with(dat.sample,paste0(day,'/',month,'/',year))
+#dat.sample$date = as.Date(dat.sample$date, format="%d/%m/%Y")
+#dat.sample$dow = as.factor(weekdays(dat.sample$date))
+# dat.sample$doy = as.numeric(strftime(dat.sample$date, format = "%j"))
+
+# make year numeric (I think it is already numeric, but doesn't hurt)
+dat.sample$year = as.numeric(dat.sample$year)
+
+#library(plyr)
+
+# create log of population
+dat.sample$logpt <- log(dat.sample$pt)
+
+zipcode_no_dams_snowmelt <- readRDS('/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/data/flood_info/zipcode_flood_master_no_dams_snowmelt_2000_2016.rds')
+USA_table <- readRDS('/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/data/flood_info/USA_table_2000_2018.rds')
+
+library(stringr)
+dat.sample$ID <- as.numeric(str_sub(dat.sample$floodzip_id, 1, 4))
+library(dplyr)
+dat.sample <- inner_join(dat.sample, USA_table[,c("id", "main_cause", "severity")], by = c("ID" = "id"))
+dat.sample <- dat.sample %>% mutate(severity = case_when(severity == 1 ~ 1,
+                                                         severity == 1.5 ~ 2,
+                                                         severity == 2 ~ 2))
+#missing zipcodes
+zipcode_denom_missing <- readRDS('/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/medicare_processing/data_update/zipcodes_in_exposure_not_in_denom.rds')
+
+numb_flooded <- as.data.frame(table(zipcode_no_dams_snowmelt$zipcode))
+numb_flooded <- numb_flooded[!(numb_flooded$Var1 %in% c(zipcode_denom_missing$zip,"35898", "36112","72314","87750",
+                                                        "57542", "57647", "57778" ,"62845" ,"58320" ,"77507", "39529", "38912" ,"72516" ,"87009", "87117", "93262" ,"95836", "29808", 
+                                                        "32212" ,"32815", "23459", "23461" ,"23521", "23709", "27859" ,"28310", "92135" ,"92155", "92862" ,"93042", "26674" ,"59354",
+                                                        "48710" ,"55455" ,"29632" ,"58319" ,"72105" ,"80913" ,"60037", "00005" ,"56740", "76949", "31314" ,"36113" ,"04549", "06433", "19112" ,
+                                                        "58705", "36615", "15275" ,"92152", "36515", "41351" ,"72199" ,"72329")),]
+
+#indicator of how many times a zipcode has been flooded over the study period 
+dat.sample <- inner_join(dat.sample, numb_flooded, by = c("zipcode" = "Var1"))
+print(dat.sample[1:30,])
+
+# create stratum with fipscounty and doy
+#colon is the same as 'interaction'
+#EX: a is 8 elements of 2 levels (4 each), b is 8 elements of 4 levels (2 each), a:b is 1:1 x 2, 1:2 x 2, 2:1 x 2, 2:2 x 2
+#dat.sample$stratum = as.factor(as.factor(dat.sample$fipscounty):as.factor(dat.sample$doy))
+#dat.sample$stratum = as.factor(as.factor(dat.sample$fipscounty):as.factor(dat.sample$month):as.factor(dat.sample$dow))
+
+# reattach coastal storm event data as would need to add coastal storm events which are associated with zero cases on a fipcounty-day
+#dir.input = paste0('~/git/rmparks_coastal_storms_Jan_2020/data/coastal_storm_data/')
+#counties.wind = readRDS(paste0(dir.input,'wind_data_',years[1],'_',years[length(years)],'.rds'))
+#counties.wind.all = readRDS(paste0(dir.input,'wind_data_all_',years[1],'_2016.rds'))
+#this is the only one that is used 
+#dir.input.array <- paste0('/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/data/flood_lag_arrays/')
+#counties.flood.edit.array = readRDS(paste0(dir.input.array,'county_flood_lag_array_',years[1],'_', years[length(years)],'.rds'))
+
+# multiple lags merge with hospitalization data
+#dat.sample.multiple = dat.sample
+#dat.sample = NULL
+# dat.merged.multiple = merge(dat.sample.multiple,counties.flood.edit.array,by.x=c('year','month','day','fipscounty'),
+#                                                 by.y=c('year','month','day','county_fips'),all.x=TRUE)
+
+# check missing values
+# dat.merged.multiple.na = dat.merged.multiple[rowSums(is.na(dat.merged.multiple)) > 0,]
+
+# # dat.sample.multiple = subset(dat.merged.multiple,!(fipscounty%in%fips_to_exclude))
+
+library(gnm) ; library(splines) ; library(dlnm)
+
+# for dnlm
+# cb1.temp = crossbasis(dat.sample.multiple$tmean,argvar=list("ns", df=3),lag=7, arglag=list("ns", df=3))
+
+# temperature of the day before and day of recorded date
+# cb1.temp = crossbasis(dat.sample.multiple$tmean,argvar=list("ns", df=2),lag=(-1:0), arglag=list("ns", df=2))
+
+# distributed lag unconstrained
+#as.factor(main_cause) didn't work 
+system.time
+({
+
+    mod_dlm_unconstrained = gnm(cases_final ~ exposed + lag_wk1 + lag_wk2 + lag_wk3 + lag_wk4 + 
+                                ns(year, df=2), data=dat.sample, offset=logpt, eliminate=factor(floodzip_id), family=quasipoisson)
+
+})
+# # distributed lag unconstrained
+# system.time({
+# 
+#     mod_dlm_unconstrained_no_temp = gnm(cases ~ event_lag0 + event_lag1 + event_lag2 + event_lag3 + event_lag4 + event_lag5 + event_lag6 + event_lag7 +
+#         ns(year, df=2), data=dat.sample.multiple, offset=logpop, eliminate=factor(stratum), family=quasipoisson)
+# 
+# })
+
+# make list of broad causes of hospitalization
+causes_groups_final=c('Cardiovascular system diseases','Respiratory system diseases','Neoplasms','Injury and poisoning','Mental illness',
+                                    'Blood diseases','Digestive system diseases','Endocrine disorders','Genitourinary system diseases',
+                                    'Infectious and parasitic diseases','Musculoskeletal and connective tissue diseases',
+                                    'Nervous system diseases','Skin and subcutaneous tissue diseases')
+
+# bonferroni correction CI calculation
+alpha = 100 * (0.05/length(causes_groups_final))
+corrected.ci = round(100 - alpha,1) / 100
+
+# provide summary for temperature model
+lag_est_mean = as.data.frame(exp(mod_dlm_unconstrained$coefficients[1:5]))
+lag_est_uncertainty = exp(confint.default(mod_dlm_unconstrained)[c(1:5),])
+lag_est_uncertainty_bf_corrected = exp(confint.default(mod_dlm_unconstrained,level=corrected.ci)[c(1:5),])
+
+dat.results = data.frame(lag=c(0:4),
+                        rr=lag_est_mean,rr.ll=lag_est_uncertainty[,1],rr.ul=lag_est_uncertainty[,2],
+                        rr.ll.bfc=lag_est_uncertainty_bf_corrected[,1],rr.ul.bfc=lag_est_uncertainty_bf_corrected[,2])
+
+dat.results$cause = causes_group
+rownames(dat.results) = seq(nrow(dat.results))
+names(dat.results)[2] = 'rr'
+
+# # provide summary for no temperature model
+# lag_est_mean_no_temp = as.data.frame(exp(mod_dlm_unconstrained_no_temp$coefficients[1:8]))
+# lag_est_uncertainty_no_temp = exp(confint.default(mod_dlm_unconstrained_no_temp)[c(1:8),])
+# lag_est_uncertainty_bf_corrected_no_temp = exp(confint.default(mod_dlm_unconstrained_no_temp,level=corrected.ci)[c(1:8),])
+# 
+# dat.results_no_temp = data.frame(lag=c(0:7),
+#                         rr=lag_est_mean_no_temp,rr.ll=lag_est_uncertainty_no_temp[,1],rr.ul=lag_est_uncertainty_no_temp[,2],
+#                         rr.ll.bfc=lag_est_uncertainty_bf_corrected_no_temp[,1],rr.ul.bfc=lag_est_uncertainty_bf_corrected_no_temp[,2])
+# 
+# dat.results_no_temp$cause = causes_group
+# rownames(dat.results_no_temp) = seq(nrow(dat.results_no_temp))
+# names(dat.results_no_temp)[2] = 'rr'
+
+# output directory
+dir.output.plots = paste0('/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/model_run/figures_UPDATE2/level1/unconstrained_dlm/')
+dir.output.model.summary = paste0('/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/model_run/results_UPDATE2/level1/unconstrained_dlm/summary/')
+dir.output.model.output = paste0('/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/model_run/results_UPDATE2/level1/unconstrained_dlm/model_output/')
+
+ifelse(!dir.exists(dir.output.plots), dir.create(dir.output.plots, recursive=TRUE), FALSE)
+ifelse(!dir.exists(dir.output.model.summary), dir.create(dir.output.model.summary, recursive=TRUE), FALSE)
+ifelse(!dir.exists(dir.output.model.output), dir.create(dir.output.model.output, recursive=TRUE), FALSE)
+
+# save summary of model results in a way which can be compiled later
+saveRDS(mod_dlm_unconstrained, paste0(dir.output.model.output,'medicare_',gsub(" ", "_", causes_group),'_model_summary_',years[1],'_',years[length(years)],'.rds'))
+
+# save w temperature model summary (#note as of, 12/17: does not include temeperature)
+write.csv(dat.results, paste0(dir.output.model.summary,'medicare_',gsub(" ", "_", causes_group),'_model_summary_',years[1],'_',years[length(years)],'.csv'))
+
+# save wo temperature model summary
+# write.csv(dat.results_no_temp, paste0(dir.output.model.summary,'medicare_',causes_group,'_model_summary_no_temp_',years[1],'_',years[length(years)],'.csv'))
+
+library(ggplot2)
+
+pdf(paste0(dir.output.plots,'medicare_rr_values_model_summary_',gsub(" ", "_", causes_group),'_',years[1],'_',years[length(years)],'.pdf'),paper='a4r',height=0,width=0)
+print(
+    ggplot(subset(dat.results)) +
+    geom_point(aes(x=lag,y=rr)) +
+    geom_errorbar(aes(x=lag,ymin=rr.ll.bfc,ymax=rr.ul.bfc)) +
+    geom_hline(yintercept=1,linetype=2) +
+    ggtitle(paste0(gsub("_", " ", causes_group),' (unconstrained dlm)')) +
+    xlab('Lag') + ylab('RR') +
+    ylim(c(0.8,1.3)) +
+    theme_bw() + theme(text = element_text(size = 8),
+    panel.grid.major = element_blank(),axis.text.x = element_text(angle=0),
+    plot.title = element_text(hjust = 0.5),panel.background = element_blank(),
+    panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+    panel.border = element_rect(colour = "black"),strip.background = element_blank(),
+    legend.position = 'bottom',legend.justification='center',
+    legend.background = element_rect(fill="white", size=.5, linetype="dotted"))
+)
+
+dev.off()
