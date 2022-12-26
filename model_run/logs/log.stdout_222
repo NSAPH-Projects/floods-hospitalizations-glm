@@ -1,0 +1,11 @@
+[1] "Crushing_injury_or_internal_injury"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 1671 2256 2143 2201 2148
+[1] 10419
+   user  system elapsed 
+  9.697   0.997  10.722 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

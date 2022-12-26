@@ -1,0 +1,11 @@
+[1] "Fracture_of_lower_limb"
+     [,1]  [,2]  [,3]  [,4]  [,5]
+[1,] 7807 10638 10546 10395 10590
+[1] 49976
+   user  system elapsed 
+  9.406   0.450   9.880 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

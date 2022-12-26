@@ -1,0 +1,11 @@
+[1] "Nephritis;_nephrosis;_renal_sclerosis"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]  187  265  249  258  268
+[1] 1227
+   user  system elapsed 
+  9.655   1.024  10.704 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

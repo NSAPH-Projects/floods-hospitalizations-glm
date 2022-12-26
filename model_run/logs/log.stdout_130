@@ -1,0 +1,11 @@
+[1] "Other_disorders_of_stomach_and_duodenum"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 3060 4142 4045 4182 4171
+[1] 19600
+   user  system elapsed 
+  9.440   0.546  10.009 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

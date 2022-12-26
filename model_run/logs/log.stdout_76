@@ -1,0 +1,11 @@
+[1] "Retinal_detachments;_defects;_vascular_occlusion;_and_retinopathy"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]  215  310  298  290  293
+[1] 1406
+   user  system elapsed 
+  9.673   0.582  10.279 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

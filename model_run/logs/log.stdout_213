@@ -1,0 +1,11 @@
+[1] "Joint_disorders_and_dislocations;_trauma-related"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]  759 1066 1007 1012 1066
+[1] 4910
+   user  system elapsed 
+  9.661   0.452  10.137 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

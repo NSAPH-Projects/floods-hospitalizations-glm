@@ -1,0 +1,11 @@
+[1] "Intestinal_obstruction_without_hernia"
+      [,1]  [,2]  [,3]  [,4]  [,5]
+[1,] 17804 23953 23860 24073 23985
+[1] 113675
+   user  system elapsed 
+  9.456   0.461   9.943 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

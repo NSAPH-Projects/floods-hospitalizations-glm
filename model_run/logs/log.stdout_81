@@ -1,0 +1,11 @@
+[1] "Otitis_media_and_related_conditions"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]  147  194  177  157  181
+[1] 856
+   user  system elapsed 
+  9.416   0.485   9.924 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

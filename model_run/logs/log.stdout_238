@@ -1,0 +1,11 @@
+[1] "Nausea_and_vomiting"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 2091 2729 2726 2737 2723
+[1] 13006
+   user  system elapsed 
+  9.411   0.441   9.877 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

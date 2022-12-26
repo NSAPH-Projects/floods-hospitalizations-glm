@@ -1,0 +1,11 @@
+[1] "Complications_of_surgical_procedures_or_medical_care"
+      [,1]  [,2]  [,3]  [,4]  [,5]
+[1,] 17458 23951 23496 23864 23655
+[1] 112424
+   user  system elapsed 
+  9.497   0.471   9.993 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

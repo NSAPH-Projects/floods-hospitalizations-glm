@@ -1,0 +1,11 @@
+[1] "Peripheral_and_visceral_atherosclerosis"
+      [,1]  [,2]  [,3]  [,4]  [,5]
+[1,] 12573 17260 16846 17129 17439
+[1] 81247
+   user  system elapsed 
+  9.667   0.472  10.164 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

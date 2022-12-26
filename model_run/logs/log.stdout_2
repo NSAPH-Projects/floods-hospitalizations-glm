@@ -1,0 +1,11 @@
+[1] "Septicemia_(except_in_labor)"
+      [,1]  [,2]  [,3]  [,4]  [,5]
+[1,] 46545 57738 58405 58550 57605
+[1] 278843
+   user  system elapsed 
+  9.604   0.452  10.081 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

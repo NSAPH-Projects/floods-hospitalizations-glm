@@ -1,0 +1,11 @@
+[1] "Cancer_of_liver_and_intrahepatic_bile_duct"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]  746 1044  970 1038 1016
+[1] 4814
+   user  system elapsed 
+  9.712   0.918  10.658 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

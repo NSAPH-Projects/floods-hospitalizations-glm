@@ -1,0 +1,11 @@
+[1] "Gastroduodenal_ulcer_(except_hemorrhage)"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 1946 2576 2677 2726 2727
+[1] 12652
+   user  system elapsed 
+  9.448   0.452   9.925 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

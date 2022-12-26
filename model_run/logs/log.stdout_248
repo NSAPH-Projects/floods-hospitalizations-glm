@@ -1,0 +1,11 @@
+[1] "Adjustment_disorders"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]  238  308  308  296  322
+[1] 1472
+   user  system elapsed 
+  9.728   1.012  10.765 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

@@ -1,0 +1,11 @@
+[1] "Poisoning_by_other_medications_and_drugs"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 1795 2391 2397 2411 2377
+[1] 11371
+   user  system elapsed 
+  9.370   0.455   9.849 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

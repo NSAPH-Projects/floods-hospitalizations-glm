@@ -1,0 +1,11 @@
+[1] "Open_wounds_of_head;_neck;_and_trunk"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]  621  813  803  819  799
+[1] 3855
+   user  system elapsed 
+  9.682   0.438  10.146 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

@@ -1,0 +1,11 @@
+[1] "Other_endocrine_disorders"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 2436 3389 3254 3291 3321
+[1] 15691
+   user  system elapsed 
+  9.531   0.444   9.999 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

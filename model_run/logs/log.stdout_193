@@ -1,0 +1,11 @@
+[1] "Spondylosis;_intervertebral_disc_disorders;_other_back_problems"
+      [,1]  [,2]  [,3]  [,4]  [,5]
+[1,] 23371 31061 30349 30682 31636
+[1] 147099
+   user  system elapsed 
+  9.428   0.461   9.913 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

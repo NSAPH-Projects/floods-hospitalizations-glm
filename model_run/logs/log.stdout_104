@@ -1,0 +1,11 @@
+[1] "Aortic;_peripheral;_and_visceral_artery_aneurysms"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 6757 9001 8723 8815 9292
+[1] 42588
+   user  system elapsed 
+  9.636   0.464  10.125 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

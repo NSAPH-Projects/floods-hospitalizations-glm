@@ -1,0 +1,11 @@
+[1] "Glaucoma"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]   30   54   64   47   52
+[1] 247
+   user  system elapsed 
+  9.660   0.974  10.660 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

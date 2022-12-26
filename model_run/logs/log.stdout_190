@@ -1,0 +1,11 @@
+[1] "Rheumatoid_arthritis_and_related_disease"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]  763 1100 1039 1050 1078
+[1] 5030
+   user  system elapsed 
+  9.447   0.488   9.960 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

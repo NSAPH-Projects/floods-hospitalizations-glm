@@ -1,0 +1,11 @@
+[1] "Other_CNS_infection_and_poliomyelitis"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]  215  275  257  312  310
+[1] 1369
+   user  system elapsed 
+  9.605   1.045  10.675 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

@@ -1,0 +1,11 @@
+[1] "Abdominal_hernia"
+     [,1]  [,2]  [,3]  [,4]  [,5]
+[1,] 7792 11106 10557 10677 11084
+[1] 51216
+   user  system elapsed 
+  9.760   0.481  10.265 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

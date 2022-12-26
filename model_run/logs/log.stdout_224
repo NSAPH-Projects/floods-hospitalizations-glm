@@ -1,0 +1,11 @@
+[1] "Open_wounds_of_extremities"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]  654  950  859  862  893
+[1] 4218
+   user  system elapsed 
+  9.415   0.491   9.932 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

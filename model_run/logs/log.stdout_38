@@ -1,0 +1,11 @@
+[1] "Non-Hodgkin`s_lymphoma"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 2242 3071 3012 3008 3136
+[1] 14469
+   user  system elapsed 
+  9.672   0.472  10.168 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

@@ -1,0 +1,11 @@
+[1] "Fracture_of_neck_of_femur_(hip)"
+      [,1]  [,2]  [,3]  [,4]  [,5]
+[1,] 30239 39824 39825 40054 39769
+[1] 189711
+   user  system elapsed 
+  9.739   0.543  10.307 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

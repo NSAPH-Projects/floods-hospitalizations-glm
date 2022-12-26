@@ -1,0 +1,11 @@
+[1] "Neoplasms_of_unspecified_nature_or_uncertain_behavior"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 2375 3332 3234 3136 3225
+[1] 15302
+   user  system elapsed 
+  9.380   0.451   9.854 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

@@ -1,0 +1,11 @@
+[1] "Other_hematologic_conditions"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]  244  371  334  337  395
+[1] 1681
+   user  system elapsed 
+  9.526   0.470  10.020 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

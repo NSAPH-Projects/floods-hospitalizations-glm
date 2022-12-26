@@ -1,0 +1,11 @@
+[1] "Chronic_ulcer_of_skin"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 3271 4627 4379 4436 4631
+[1] 21344
+   user  system elapsed 
+  9.391   0.475   9.890 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

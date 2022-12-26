@@ -1,0 +1,11 @@
+[1] "Immunizations_and_screening_for_infectious_disease"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]   18   33   28   22   28
+[1] 129
+   user  system elapsed 
+  9.364   0.513   9.901 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

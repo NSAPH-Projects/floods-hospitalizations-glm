@@ -1,0 +1,11 @@
+[1] "Essential_hypertension"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 3060 4186 4226 4196 4279
+[1] 19947
+   user  system elapsed 
+  9.344   0.481   9.848 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

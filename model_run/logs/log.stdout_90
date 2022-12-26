@@ -1,0 +1,11 @@
+[1] "Coronary_atherosclerosis_and_other_heart_disease"
+      [,1]  [,2]  [,3]  [,4]  [,5]
+[1,] 57994 80460 79722 79186 80877
+[1] 378239
+   user  system elapsed 
+  9.497   0.470   9.990 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

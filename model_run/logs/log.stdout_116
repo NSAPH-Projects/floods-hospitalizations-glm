@@ -1,0 +1,11 @@
+[1] "Chronic_obstructive_pulmonary_disease_and_bronchiectasis"
+      [,1]  [,2]  [,3]  [,4]  [,5]
+[1,] 47353 64290 63772 63710 63380
+[1] 302505
+   user  system elapsed 
+  9.678   0.788  10.492 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

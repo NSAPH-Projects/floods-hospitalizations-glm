@@ -1,0 +1,11 @@
+[1] "Biliary_tract_disease"
+      [,1]  [,2]  [,3]  [,4]  [,5]
+[1,] 16566 22413 22579 22484 22371
+[1] 106413
+   user  system elapsed 
+  9.714   0.458  10.198 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

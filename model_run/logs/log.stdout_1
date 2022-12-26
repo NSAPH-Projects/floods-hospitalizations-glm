@@ -1,0 +1,11 @@
+[1] "Tuberculosis"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]  135  175  211  183  180
+[1] 884
+   user  system elapsed 
+  9.519   0.467  10.011 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

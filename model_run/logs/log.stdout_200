@@ -1,0 +1,11 @@
+[1] "Other_bone_disease_and_musculoskeletal_deformities"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 2576 3544 3452 3501 3627
+[1] 16700
+   user  system elapsed 
+  9.531   0.475  10.030 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

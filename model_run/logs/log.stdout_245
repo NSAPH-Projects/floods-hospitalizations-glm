@@ -1,0 +1,11 @@
+[1] "Other_aftercare"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]  749  768  755  728  780
+[1] 3780
+   user  system elapsed 
+  9.638   0.893  10.556 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

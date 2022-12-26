@@ -1,0 +1,11 @@
+[1] "Acute_myocardial_infarction"
+      [,1]  [,2]  [,3]  [,4]  [,5]
+[1,] 41622 56856 56766 57095 56627
+[1] 268966
+   user  system elapsed 
+  9.472   0.451   9.947 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

@@ -1,0 +1,11 @@
+[1] "Other_skin_disorders"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]  189  262  275  243  229
+[1] 1198
+   user  system elapsed 
+  9.420   0.453   9.897 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

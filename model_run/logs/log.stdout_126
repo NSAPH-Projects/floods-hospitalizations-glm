@@ -1,0 +1,11 @@
+[1] "Diseases_of_mouth;_excluding_dental"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]  620  859  849  873  871
+[1] 4072
+   user  system elapsed 
+  9.369   0.476   9.870 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

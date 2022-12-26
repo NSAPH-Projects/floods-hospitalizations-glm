@@ -1,0 +1,11 @@
+[1] "Nervous_system_congenital_anomalies"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]   17   27   41   23   36
+[1] 144
+   user  system elapsed 
+  9.652   0.974  10.654 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

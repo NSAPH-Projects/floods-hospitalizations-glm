@@ -1,0 +1,11 @@
+[1] "Heart_valve_disorders"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 6496 8942 8475 9031 9003
+[1] 41947
+   user  system elapsed 
+  9.387   0.453   9.864 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

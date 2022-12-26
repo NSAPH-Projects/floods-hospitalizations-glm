@@ -1,0 +1,11 @@
+[1] "Substance-related_disorders"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 1482 2071 2036 2025 2072
+[1] 9686
+   user  system elapsed 
+  9.659   1.010  10.696 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

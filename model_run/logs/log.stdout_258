@@ -1,0 +1,11 @@
+[1] "Alcohol-related_disorders"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 2069 2833 2903 2968 2807
+[1] 13580
+   user  system elapsed 
+  9.636   1.006  10.668 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

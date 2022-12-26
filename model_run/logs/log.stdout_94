@@ -1,0 +1,11 @@
+[1] "Conduction_disorders"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 5248 7082 6938 6896 7116
+[1] 33280
+   user  system elapsed 
+  9.440   0.478   9.943 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

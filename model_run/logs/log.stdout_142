@@ -1,0 +1,11 @@
+[1] "Noninfectious_gastroenteritis"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 5443 7364 7372 7261 7376
+[1] 34816
+   user  system elapsed 
+  9.548   0.493  10.064 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

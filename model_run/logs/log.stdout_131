@@ -1,0 +1,11 @@
+[1] "Appendicitis_and_other_appendiceal_conditions"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 2069 2787 2676 2553 2573
+[1] 12658
+   user  system elapsed 
+  9.339   0.479   9.843 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

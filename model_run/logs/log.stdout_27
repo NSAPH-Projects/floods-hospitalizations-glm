@@ -1,0 +1,11 @@
+[1] "Cancer_of_ovary"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 1063 1398 1315 1370 1439
+[1] 6585
+   user  system elapsed 
+  9.601   0.836  10.462 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

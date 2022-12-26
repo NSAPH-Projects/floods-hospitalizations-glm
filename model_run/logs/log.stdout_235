@@ -1,0 +1,11 @@
+[1] "Lymphadenitis"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]  193  247  223  252  259
+[1] 1174
+   user  system elapsed 
+  9.435   0.425   9.883 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

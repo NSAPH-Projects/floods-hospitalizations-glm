@@ -1,0 +1,11 @@
+[1] "Administrative_social_admission"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    1    4    0    1    2
+[1] 8
+   user  system elapsed 
+ 13.601   0.640  14.275 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

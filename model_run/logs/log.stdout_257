@@ -1,0 +1,11 @@
+[1] "Schizophrenia_and_other_psychotic_disorders"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 3824 5410 5250 5329 5524
+[1] 25337
+   user  system elapsed 
+  9.584   0.484  10.092 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

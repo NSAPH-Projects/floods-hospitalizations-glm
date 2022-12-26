@@ -1,0 +1,11 @@
+[1] "Hodgkin`s_disease"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]   90  115  111  117  129
+[1] 562
+   user  system elapsed 
+  9.392   0.471   9.889 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

@@ -1,0 +1,11 @@
+[1] "Acute_posthemorrhagic_anemia"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 1421 1681 1666 1664 1705
+[1] 8137
+   user  system elapsed 
+  9.651   0.967  10.643 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

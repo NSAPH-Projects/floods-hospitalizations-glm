@@ -1,0 +1,11 @@
+[1] "Other_circulatory_disease"
+     [,1]  [,2]  [,3]  [,4]  [,5]
+[1,] 8458 11778 11691 11507 11652
+[1] 55086
+   user  system elapsed 
+  9.593   0.467  10.084 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

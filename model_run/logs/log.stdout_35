@@ -1,0 +1,11 @@
+[1] "Cancer_of_brain_and_nervous_system"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 1075 1397 1431 1366 1398
+[1] 6667
+   user  system elapsed 
+  9.377   0.484   9.886 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

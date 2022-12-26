@@ -1,0 +1,11 @@
+[1] "Cardiac_arrest_and_ventricular_fibrillation"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]  963 1235 1362 1300 1335
+[1] 6195
+   user  system elapsed 
+  9.528   0.466  10.018 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

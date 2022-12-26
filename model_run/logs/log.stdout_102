@@ -1,0 +1,11 @@
+[1] "Late_effects_of_cerebrovascular_disease"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 1391 1768 1689 1700 1684
+[1] 8232
+   user  system elapsed 
+  9.679   0.473  10.176 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

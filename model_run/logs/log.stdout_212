@@ -1,0 +1,11 @@
+[1] "Other_perinatal_conditions"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    0    0    0    0    1
+[1] 1
+   user  system elapsed 
+ 14.956   0.542  15.536 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

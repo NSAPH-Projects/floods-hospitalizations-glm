@@ -1,0 +1,11 @@
+[1] "Viral_infection"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 1870 2532 2597 2489 2559
+[1] 12047
+   user  system elapsed 
+  9.613   0.984  10.623 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

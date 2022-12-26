@@ -1,0 +1,11 @@
+[1] "Medical_examination_evaluation"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]   19    6   12   13   13
+[1] 63
+   user  system elapsed 
+  9.618   0.808  10.451 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

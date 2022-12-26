@@ -1,0 +1,11 @@
+[1] "Other_screening_for_suspected_conditions_(not_mental_disorders_or_infectious_disease)"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]   91   83   82  101   81
+[1] 438
+   user  system elapsed 
+  9.511   0.451   9.986 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

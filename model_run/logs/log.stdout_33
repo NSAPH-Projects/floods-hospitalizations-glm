@@ -1,0 +1,11 @@
+[1] "Cancer_of_kidney_and_renal_pelvis"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 2047 2804 2635 2756 2972
+[1] 13214
+   user  system elapsed 
+  9.668   0.889  10.583 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

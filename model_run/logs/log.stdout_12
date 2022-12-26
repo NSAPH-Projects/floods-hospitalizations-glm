@@ -1,0 +1,11 @@
+[1] "Cancer_of_esophagus"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]  583  927  831  789  869
+[1] 3999
+   user  system elapsed 
+  9.643   0.475  10.142 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

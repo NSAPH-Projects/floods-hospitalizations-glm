@@ -1,0 +1,11 @@
+[1] "Conditions_associated_with_dizziness_or_vertigo"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 4088 5630 5788 5690 5697
+[1] 26893
+   user  system elapsed 
+  9.345   0.475   9.844 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

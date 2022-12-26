@@ -1,0 +1,11 @@
+[1] "Other_acquired_deformities"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 1809 2246 2275 2345 2522
+[1] 11197
+   user  system elapsed 
+  9.467   0.430   9.922 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

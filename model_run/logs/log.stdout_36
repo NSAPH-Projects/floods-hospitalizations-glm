@@ -1,0 +1,11 @@
+[1] "Cancer_of_thyroid"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]  461  612  604  631  637
+[1] 2945
+   user  system elapsed 
+  9.478   0.448   9.951 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

@@ -1,0 +1,11 @@
+[1] "Cancer;_other_and_unspecified_primary"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]  282  363  325  358  412
+[1] 1740
+   user  system elapsed 
+  9.382   0.483   9.889 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

@@ -1,0 +1,11 @@
+[1] "Intestinal_infection"
+     [,1]  [,2]  [,3]  [,4]  [,5]
+[1,] 8314 11538 11495 11356 11239
+[1] 53942
+   user  system elapsed 
+  9.342   0.483   9.849 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

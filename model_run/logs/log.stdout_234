@@ -1,0 +1,11 @@
+[1] "Fever_of_unknown_origin"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 1979 2673 2764 2634 2604
+[1] 12654
+   user  system elapsed 
+  9.401   0.450   9.875 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

@@ -1,0 +1,11 @@
+[1] "Urinary_tract_infections"
+      [,1]  [,2]  [,3]  [,4]  [,5]
+[1,] 32968 44161 44048 44034 44380
+[1] 209591
+   user  system elapsed 
+  9.709   0.456  10.191 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

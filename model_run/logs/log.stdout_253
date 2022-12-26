@@ -1,0 +1,11 @@
+[1] "Disorders_usually_diagnosed_in_infancy_childhood_or_adolescence"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    4    2    4    1    0
+[1] 11
+   user  system elapsed 
+ 15.685   1.228  16.955 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

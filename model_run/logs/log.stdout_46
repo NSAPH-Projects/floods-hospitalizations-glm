@@ -1,0 +1,11 @@
+[1] "Benign_neoplasm_of_uterus"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]  299  404  371  394  399
+[1] 1867
+   user  system elapsed 
+  9.364   0.475   9.863 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

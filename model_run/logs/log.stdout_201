@@ -1,0 +1,11 @@
+[1] "Cardiac_and_circulatory_congenital_anomalies"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]  347  495  478  487  482
+[1] 2289
+   user  system elapsed 
+  9.557   0.475  10.058 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

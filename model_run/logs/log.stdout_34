@@ -1,0 +1,11 @@
+[1] "Cancer_of_other_urinary_organs"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]  278  359  325  353  350
+[1] 1665
+   user  system elapsed 
+  9.333   0.466   9.824 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

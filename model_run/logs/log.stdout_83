@@ -1,0 +1,11 @@
+[1] "Other_ear_and_sense_organ_disorders"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]  136  212  223  230  251
+[1] 1052
+   user  system elapsed 
+  9.367   0.466   9.856 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

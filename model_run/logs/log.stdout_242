@@ -1,0 +1,11 @@
+[1] "Rehabilitation_care;_fitting_of_prostheses;_and_adjustment_of_devices"
+      [,1]  [,2]  [,3]  [,4]  [,5]
+[1,] 32444 44258 44311 43948 44675
+[1] 209636
+   user  system elapsed 
+  9.448   0.470   9.941 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

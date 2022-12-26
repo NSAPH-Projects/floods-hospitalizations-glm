@@ -1,0 +1,11 @@
+[1] "Acute_and_chronic_tonsillitis"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]   72   70   76   85   70
+[1] 373
+   user  system elapsed 
+  9.655   0.543  10.224 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

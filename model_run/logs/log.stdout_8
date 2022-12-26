@@ -1,0 +1,11 @@
+[1] "Other_infections;_including_parasitic"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]  363  437  420  441  416
+[1] 2077
+   user  system elapsed 
+ 10.840   1.627  12.497 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

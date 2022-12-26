@@ -1,0 +1,11 @@
+[1] "Congestive_heart_failure;_nonhypertensive"
+      [,1]   [,2]   [,3]   [,4]   [,5]
+[1,] 80220 111162 110266 110888 111652
+[1] 524188
+   user  system elapsed 
+  9.454   0.490   9.969 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

@@ -1,0 +1,11 @@
+[1] "Coagulation_and_hemorrhagic_disorders"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 1793 2501 2525 2548 2510
+[1] 11877
+   user  system elapsed 
+  9.685   0.991  10.701 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

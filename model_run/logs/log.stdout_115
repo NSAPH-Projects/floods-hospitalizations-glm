@@ -1,0 +1,11 @@
+[1] "Other_upper_respiratory_infections"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 1126 1559 1491 1477 1497
+[1] 7150
+   user  system elapsed 
+  9.677   0.513  10.214 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

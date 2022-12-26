@@ -1,0 +1,11 @@
+[1] "Cancer_of_head_and_neck"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 1310 1779 1720 1801 1797
+[1] 8407
+   user  system elapsed 
+  9.352   0.493   9.871 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

@@ -1,0 +1,11 @@
+[1] "Other_non-epithelial_cancer_of_skin"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]  417  568  551  524  594
+[1] 2654
+   user  system elapsed 
+  9.681   0.517  10.222 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

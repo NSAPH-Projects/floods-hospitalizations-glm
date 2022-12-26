@@ -1,0 +1,11 @@
+[1] "Intracranial_injury"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 6667 8692 8731 8700 8768
+[1] 41558
+   user  system elapsed 
+  9.612   0.473  10.110 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

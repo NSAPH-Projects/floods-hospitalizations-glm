@@ -1,0 +1,11 @@
+[1] "Cystic_fibrosis"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    1    5    4    2    2
+[1] 14
+   user  system elapsed 
+ 12.595   0.874  13.500 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

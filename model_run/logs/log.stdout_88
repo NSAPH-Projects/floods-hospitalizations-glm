@@ -1,0 +1,11 @@
+[1] "Hypertension_with_complications_and_secondary_hypertension"
+      [,1]  [,2]  [,3]  [,4]  [,5]
+[1,] 12281 16897 16973 17002 16945
+[1] 80098
+   user  system elapsed 
+  9.419   0.454   9.897 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

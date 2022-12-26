@@ -1,0 +1,11 @@
+[1] "Parkinson`s_disease"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 1238 1643 1580 1660 1670
+[1] 7791
+   user  system elapsed 
+  9.675   0.473  10.172 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

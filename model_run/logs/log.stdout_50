@@ -1,0 +1,11 @@
+[1] "Diabetes_mellitus_with_complications"
+      [,1]  [,2]  [,3]  [,4]  [,5]
+[1,] 14041 19542 19454 19630 19601
+[1] 92268
+   user  system elapsed 
+  9.420   0.474   9.918 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

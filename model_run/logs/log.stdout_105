@@ -1,0 +1,11 @@
+[1] "Aortic_and_peripheral_arterial_embolism_or_thrombosis"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 2151 2963 2960 2889 2923
+[1] 13886
+   user  system elapsed 
+  9.540   0.436  10.000 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

@@ -1,0 +1,11 @@
+[1] "Other_diseases_of_veins_and_lymphatics"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 1114 1655 1516 1516 1516
+[1] 7317
+   user  system elapsed 
+  9.651   0.462  10.137 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

@@ -1,0 +1,11 @@
+[1] "Cancer_of_other_male_genital_organs"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]   48   70   51   53   60
+[1] 282
+   user  system elapsed 
+  9.354   0.488   9.866 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

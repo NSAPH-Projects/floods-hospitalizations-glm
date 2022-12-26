@@ -1,0 +1,11 @@
+[1] "Personality_disorders"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]   27   48   54   44   41
+[1] 214
+   user  system elapsed 
+  9.570   0.466  10.061 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

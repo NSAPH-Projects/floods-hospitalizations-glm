@@ -1,0 +1,11 @@
+[1] "Ovarian_cyst"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]  235  346  351  365  371
+[1] 1668
+   user  system elapsed 
+ 10.567   1.530  12.127 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

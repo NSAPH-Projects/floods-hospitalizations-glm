@@ -1,0 +1,11 @@
+[1] "Pulmonary_heart_disease"
+     [,1]  [,2]  [,3]  [,4]  [,5]
+[1,] 7932 10697 10493 10506 10603
+[1] 50231
+   user  system elapsed 
+  9.459   0.573  10.056 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

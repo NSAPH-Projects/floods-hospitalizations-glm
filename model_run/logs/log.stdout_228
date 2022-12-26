@@ -1,0 +1,11 @@
+[1] "Burns"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]  463  591  575  618  614
+[1] 2861
+   user  system elapsed 
+ 10.657   1.565  12.253 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

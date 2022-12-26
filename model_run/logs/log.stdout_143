@@ -1,0 +1,11 @@
+[1] "Other_gastrointestinal_disorders"
+     [,1]  [,2]  [,3]  [,4]  [,5]
+[1,] 9237 12891 12688 12686 12952
+[1] 60454
+   user  system elapsed 
+  9.746   0.916  10.689 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

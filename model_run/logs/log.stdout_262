@@ -1,0 +1,11 @@
+[1] "Miscellaneous_mental_health_disorders"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]  270  370  379  387  428
+[1] 1834
+   user  system elapsed 
+  9.689   0.594  10.308 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

@@ -1,0 +1,11 @@
+[1] "Acute_bronchitis"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 4038 5422 5431 5359 5216
+[1] 25466
+   user  system elapsed 
+  9.689   0.568  10.282 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

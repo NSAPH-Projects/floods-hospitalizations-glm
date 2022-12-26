@@ -1,0 +1,11 @@
+[1] "Prolapse_of_female_genital_organs"
+     [,1] [,2] [,3] [,4] [,5]
+[1,] 5166 7169 6982 7078 7461
+[1] 33856
+   user  system elapsed 
+  9.612   0.813  10.450 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 

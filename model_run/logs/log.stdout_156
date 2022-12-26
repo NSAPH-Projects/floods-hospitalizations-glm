@@ -1,0 +1,11 @@
+[1] "Inflammatory_diseases_of_female_pelvic_organs"
+     [,1] [,2] [,3] [,4] [,5]
+[1,]  264  376  349  348  364
+[1] 1701
+   user  system elapsed 
+  9.675   0.589  10.288 
+[1] FALSE
+[1] FALSE
+[1] FALSE
+null device 
+          1 
