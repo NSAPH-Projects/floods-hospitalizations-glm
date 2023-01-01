@@ -45,7 +45,7 @@ dat.sample$lag_wk3 <- ifelse(dat.sample$control_indicator == 1 | dat.sample$cont
 dat.sample$lag_wk4 <- ifelse(dat.sample$control_indicator == 1 | dat.sample$control_indicator == 2, 0, dat.sample$lag_wk4)
 
 #count of number of cases
-df <- matrix(data = NA, nrow = 1, ncol = 5)
+df <- matrix(data = NA, nrow = 1, ncol = 7)
 dat2 <- c(dat.sample$cases)
 for (j in c(1:5)){
     val <- 0 
@@ -55,7 +55,9 @@ for (j in c(1:5)){
     df[1,j] <- val 
 } 
 
-total_cases <- rowSums(df)
+df[1,6] <- sum(df[1,1:5])
+df[1,7] <- cod.arg
+write.csv(df, file = paste0(seedVal,'.csv'))
 
 zipcode_no_dams_snowmelt <- readRDS('/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/data/flood_info/zipcode_flood_master_no_dams_snowmelt_2000_2016.rds')
 USA_table <- readRDS('/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/data/flood_info/USA_table_2000_2018.rds')
