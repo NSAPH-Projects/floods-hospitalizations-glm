@@ -100,20 +100,20 @@ dat <- dat[!(dat$floodzip_id %in% c(floodzips_remove)),]
 print(dat[1:30,])
 nrow(dat)
 
-# merging temperature data with model matrix 
-#dat.temp <- readRDS("/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/model_run/gridmet/dat.temperature.rds")
-dat.temp <- readRDS('/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/model_run/gridmet/dat.temperature.final_JUN.rds')
-dat$tmmx <- dat.temp$tmmx
-
-# merging humidity data with model matrix 
-#dat.hum <- readRDS("/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/model_run/gridmet/dat.humidity.rds")
-dat.hum <- readRDS('/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/model_run/gridmet/dat.humidity.final_JUN.rds')
-dat$rmax <- dat.hum$rmax
-
-# merging windspeed data with model matrix 
-#dat.wind <- readRDS("/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/model_run/gridmet/dat.windspeed.rds")
-dat.wind <- readRDS('/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/model_run/gridmet/dat.wind.final_JUN.rds')
-dat$vs <- dat.wind$vs
+    # merging temperature data with model matrix 
+    #dat.temp <- readRDS("/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/model_run/gridmet/dat.temperature.rds")
+    dat.temp <- readRDS('/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/model_run/gridmet/dat.temperature.final_JUN.rds')
+    dat$tmmx <- dat.temp$tmmx
+    
+    # merging humidity data with model matrix 
+    #dat.hum <- readRDS("/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/model_run/gridmet/dat.humidity.rds")
+    dat.hum <- readRDS('/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/model_run/gridmet/dat.humidity.final_JUN.rds')
+    dat$rmax <- dat.hum$rmax
+    
+    # merging windspeed data with model matrix 
+    #dat.wind <- readRDS("/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/model_run/gridmet/dat.windspeed.rds")
+    dat.wind <- readRDS('/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/model_run/gridmet/dat.windspeed.final_JUN.rds')
+    dat$vs <- dat.wind$vs
 
 dat.sample <- dat
 print(dat.sample[1:30,])
