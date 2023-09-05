@@ -1,9 +1,7 @@
 # this code will take a particular cause of death (CCS level 1)
 # and run the chosen model for it
 
-# NEED TO RUN ON RCE
-
-#SA edited from RMP - 7/8/2022
+#SA edited from RMP 
 
 rm(list=ls())
 
@@ -11,11 +9,11 @@ rm(list=ls())
 args <- commandArgs(trailingOnly=TRUE)
 seedVal = as.numeric(args[1])
 
-# for testing
-#seedVal = 1
-
 # years of analysis
 years = c(2000:2016)
+
+library(stringr)
+library(dplyr)
 
 # load ccs lookup
 code.lookup.merged = read.csv('/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/medicare_processing/data_update/CCS_DX.csv')
@@ -69,7 +67,6 @@ if(!file.exists(input.file)){
     
     print(dat.all[1:30,])
     # resummarise by CCS level 1
-    library(dplyr)
 
     dat <- dat.all %>% group_by(floodzip_id, control_indicator) %>% mutate(cases_final = case_when(exposed == 1 ~ sum(exposed * cases),
                                                                                 lag_wk1 == 1 ~ sum(lag_wk1 * cases),
@@ -101,92 +98,38 @@ print(dat[1:30,])
 nrow(dat)
 
     # merging temperature data with model matrix 
-    #dat.temp <- readRDS("/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/model_run/gridmet/dat.temperature.rds")
     dat.temp <- readRDS('/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/model_run/gridmet/dat.temperature.final_JUN.rds')
     dat$tmmx <- dat.temp$tmmx
     
     # merging humidity data with model matrix 
-    #dat.hum <- readRDS("/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/model_run/gridmet/dat.humidity.rds")
     dat.hum <- readRDS('/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/model_run/gridmet/dat.humidity.final_JUN.rds')
     dat$rmax <- dat.hum$rmax
     
     # merging windspeed data with model matrix 
-    #dat.wind <- readRDS("/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/model_run/gridmet/dat.windspeed.rds")
     dat.wind <- readRDS('/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/model_run/gridmet/dat.windspeed.final_JUN.rds')
     dat$vs <- dat.wind$vs
 
 dat.sample <- dat
 print(dat.sample[1:30,])
 
-# add date info 
-#library(lubridate)
-#dat.sample$date = with(dat.sample,paste0(day,'/',month,'/',year))
-#dat.sample$date = as.Date(dat.sample$date, format="%d/%m/%Y")
-#dat.sample$dow = as.factor(weekdays(dat.sample$date))
-# dat.sample$doy = as.numeric(strftime(dat.sample$date, format = "%j"))
-
-# make year numeric (I think it is already numeric, but doesn't hurt)
+# make year numeric 
 dat.sample$year = as.numeric(dat.sample$year)
 
-#library(plyr)
 
 # create log of population
 dat.sample$logpt <- log(dat.sample$pt)
 
-#zipcode_no_dams_snowmelt <- readRDS('/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/data/flood_info/zipcode_flood_master_no_dams_snowmelt_2000_2016.rds')
-load('/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/data/flood_info/zipcode_flood_subset_2000_2016_APR.Rdata') #path !!!
 USA_table <- readRDS('/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/data/flood_info/USA_table_2000_2018.rds')
 
-library(stringr)
 dat.sample$ID <- as.numeric(str_sub(dat.sample$floodzip_id, 1, 4))
-library(dplyr)
+
 dat.sample <- inner_join(dat.sample, USA_table[,c("id", "main_cause", "severity")], by = c("ID" = "id"))
 dat.sample <- dat.sample %>% mutate(severity = case_when(severity == 1 ~ 1,
                                                          severity == 1.5 ~ 2,
                                                          severity == 2 ~ 2))
-#missing zipcodes
-#zipcode_denom_missing <- readRDS('/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/medicare_processing/data_update/zipcodes_in_exposure_not_in_denom.rds')
-
-#numb_flooded <- as.data.frame(table(zipcode_no_dams_snowmelt$zipcode))
-# numb_flooded <- numb_flooded[!(numb_flooded$Var1 %in% c(zipcode_denom_missing$zip,"35898", "36112","72314","87750",
-#                                                         "57542", "57647", "57778" ,"62845" ,"58320" ,"77507", "39529", "38912" ,"72516" ,"87009", "87117", "93262" ,"95836", "29808", 
-#                                                         "32212" ,"32815", "23459", "23461" ,"23521", "23709", "27859" ,"28310", "92135" ,"92155", "92862" ,"93042", "26674" ,"59354",
-#                                                         "48710" ,"55455" ,"29632" ,"58319" ,"72105" ,"80913" ,"60037", "00005" ,"56740", "76949", "31314" ,"36113" ,"04549", "06433", "19112" ,
-#                                                         "58705", "36615", "15275" ,"92152", "36515", "41351" ,"72199" ,"72329", missing_gridmet_zipcodes)),]
-# 
-# #indicator of how many times a zipcode has been flooded over the study period 
-# dat.sample <- inner_join(dat.sample, numb_flooded, by = c("zipcode" = "Var1"))
-# print(dat.sample[1:30,])
-
-# create stratum with fipscounty and doy
-#colon is the same as 'interaction'
-#EX: a is 8 elements of 2 levels (4 each), b is 8 elements of 4 levels (2 each), a:b is 1:1 x 2, 1:2 x 2, 2:1 x 2, 2:2 x 2
-#dat.sample$stratum = as.factor(as.factor(dat.sample$fipscounty):as.factor(dat.sample$doy))
-#dat.sample$stratum = as.factor(as.factor(dat.sample$fipscounty):as.factor(dat.sample$month):as.factor(dat.sample$dow))
-
-# reattach coastal storm event data as would need to add coastal storm events which are associated with zero cases on a fipcounty-day
-#dir.input = paste0('~/git/rmparks_coastal_storms_Jan_2020/data/coastal_storm_data/')
-#counties.wind = readRDS(paste0(dir.input,'wind_data_',years[1],'_',years[length(years)],'.rds'))
-#counties.wind.all = readRDS(paste0(dir.input,'wind_data_all_',years[1],'_2016.rds'))
-#this is the only one that is used 
-#dir.input.array <- paste0('/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/data/flood_lag_arrays/')
-#counties.flood.edit.array = readRDS(paste0(dir.input.array,'county_flood_lag_array_',years[1],'_', years[length(years)],'.rds'))
-
-# multiple lags merge with hospitalization data
-#dat.sample.multiple = dat.sample
-#dat.sample = NULL
-# dat.merged.multiple = merge(dat.sample.multiple,counties.flood.edit.array,by.x=c('year','month','day','fipscounty'),
-#                                                 by.y=c('year','month','day','county_fips'),all.x=TRUE)
-
-# check missing values
-# dat.merged.multiple.na = dat.merged.multiple[rowSums(is.na(dat.merged.multiple)) > 0,]
-
-# # dat.sample.multiple = subset(dat.merged.multiple,!(fipscounty%in%fips_to_exclude))
 
 library(gnm) ; library(splines) ; library(dlnm)
 
-# for dnlm
-# cb1.temp = crossbasis(dat.sample.multiple$tmean,argvar=list("ns", df=3),lag=7, arglag=list("ns", df=3))
 
 # temperature of the recorded flooded days (did not adjust for day before as of 1/18/2023)
 cb1.temp = crossbasis(dat.sample$tmmx,argvar=list("ns", df=2),lag=0, arglag=list("ns", df=2))
@@ -198,7 +141,6 @@ cb1.hum = crossbasis(dat.sample$rmax,argvar=list("ns", df=2),lag=0, arglag=list(
 cb1.wind = crossbasis(dat.sample$vs,argvar=list("ns", df=2),lag=0, arglag=list("ns", df=2))
 
 # distributed lag unconstrained
-#as.factor(main_cause) didn't work 
 system.time
 ({
 

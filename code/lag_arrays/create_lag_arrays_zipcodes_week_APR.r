@@ -3,14 +3,6 @@
 # this is for merging days into weeks 
 # with zipcodes 
 
-
-#rm(list=ls())
-
-# break down the arguments from Rscript
-#args <- commandArgs(trailingOnly=TRUE)
-#start_year <- as.numeric(args[1])
-#end_year = as.numeric(args[2])
-
 start_year <- as.numeric("2000")
 end_year = as.numeric("2016")
 
@@ -24,19 +16,6 @@ load('zipcode_flood_subset_2000_2016_APR.Rdata')
 #change to match what's contained in main code
 colnames(flood_data_test)[2] <- "zipcode"
 colnames(flood_data_test)[1] <- "id"
-#flood_data_test <- flood_data_test %>% filter(year <= 2016)
-
-# flood_data_test$total_duration <- ifelse(flood_data_test$total_duration > 14, 
-#                                            14, flood_data_test$total_duration)
-
-# flood_data_test$zipcode <- as.numeric(flood_data_test$zipcode)
-
-#remove floods caused by dams and snowmelt 
-# flood_data_test_no_dams_snowmelt <- flood_data_test[!(flood_data_test$main_cause == "Dam") 
-#                                                          & !(flood_data_test$main_cause == "Snowmelt, Ice, Rain"),]
-# flood_data_test_no_dams_snowmelt <-flood_data_test_no_dams_snowmelt[,c(1:3,8:13,4:7)]
-# saveRDS(flood_data_test_no_dams_snowmelt, "zipcode_flood_master_no_dams_snowmelt_UPDATE_2000_2016.rds")
-#flood_data_test_no_dams_snowmelt <- readRDS('zipcode_flood_master_no_dams_snowmelt_2000_2016.rds')
 
 # to obtain the number of unique zips (19104 zips in subset, 20561 in total)
 all_zips = as.numeric(unique(flood_data_test$zipcode))
@@ -50,8 +29,6 @@ max_duration <- max(flood_data_test$max)
 names_col_df2 <- paste0('event_exposed',1:max_duration)
 num_lagweeks <- 4
 names_col_df3 <- paste0('event_lag',1:(7*num_lagweeks))
-
-#change in code from 28 to be 7*num_lagweeks
 
 for (i in 1:nrow(flood_data_test)){
   df1 <- data.frame(matrix(NA, nrow = flood_data_test$max[i] + 7*num_lagweeks, ncol = 5))
@@ -74,7 +51,6 @@ for (i in 1:length(list_df)){
   list_df[[i]]$year <- lubridate::year(dates)
   list_df[[i]]$month <- lubridate::month(dates)
   list_df[[i]]$day <- lubridate::day(dates)
-  #if we cut exposure off at 14 days, we would have ncol = 14 in df2 
   df2 <- data.frame(matrix(data = NA, nrow = flood_data_test$max[i] + 7*num_lagweeks, ncol = max_duration))
   colnames(df2) <- names_col_df2
   for (k in 1:flood_data_test$max[i]){
@@ -86,7 +62,6 @@ for (i in 1:length(list_df)){
   for (l in c(1:(7*num_lagweeks))){
     list_df[[i]][flood_data_test$max[i] + l, ncol(df1) + ncol(df2) + l] <- 1
   }
-  #list_df[[i]]$date <- NULL 
 }
 
 zipcode_flood_edit_array_week <- plyr::ldply(list_df, data.frame)
@@ -101,7 +76,6 @@ zipcode_flood_edit_array_week$event_lagwk2 <- ifelse(rowSums(zipcode_flood_edit_
 zipcode_flood_edit_array_week$event_lagwk3 <- ifelse(rowSums(zipcode_flood_edit_array_week[,c(63:69)]) >= 1, 1, 0)
 zipcode_flood_edit_array_week$event_lagwk4 <- ifelse(rowSums(zipcode_flood_edit_array_week[,c(70:76)]) >= 1, 1, 0)
 
-#can remove date and flood-zipcode id columns later 
 #remove exposure + lag day indicators 
 zipcode_flood_exp_lag_array_week  <- zipcode_flood_edit_array_week[-c(7:76)]
 zipcode_flood_exp_lag_array_week$zipcode <- as.numeric(zipcode_flood_exp_lag_array_week$zipcode)
@@ -121,8 +95,6 @@ zipcode_flood_summarized_date_array <- zipcode_flood_exp_lag_array_week %>%
 
 zipcode_flood_summarized_date_array$zipcode <- as.numeric(substr(zipcode_flood_summarized_date_array$floodzip_id, 15, 20))
 save(zipcode_flood_summarized_date_array, file = "zipcode_flood_summarized_date_array_2000_2016_APR.Rdata")
-
-#zipcode_flood_summarized_date_array <- readRDS("zipcode_flood_summarized_date_array_2000_2016.rds")
 
 #for each year, change the year to be a different year in dataset then compare each control to original set of floods within that specific zipcode
 #if overlaps = 0, if no overlap = 1 --> pick closest to the year of flood and then add all dates within bound to array
@@ -173,7 +145,6 @@ control_dates_df <- as.data.frame(control_dates_df)
 save(control_dates_df, file = "control_dates_df_2000_2016_APR.Rdata")
 
 #preliminary data frame -- need to remove those with years outside of 2000:2016 and identify two controls 
-#control_dates_df <- readRDS("control_dates_df.rds")
 
 control_dates_df$V3 <- as.Date(as.numeric(control_dates_df$V3), origin = "1970-01-01")
 control_dates_df$V4 <- as.Date(as.numeric(control_dates_df$V4), origin = "1970-01-01")
@@ -316,8 +287,7 @@ save(control_dates_df_final, file = "control_dates_df_final_2000_2016.Rdata")
 
 zipcode_flood_control_array_week <- data.frame()
 
-#flood 2167, 2177 found controls in 2002 and 2004, but 2004 is a leap year so should we go to 2001/2005? or remove the 29th of February? 
-#this is slow 
+#flood 2167, 2177 found controls in 2002 and 2004, but 2004 is a leap year so we still use closest years but make sure length of controls are equivalent
 for (i in 1:nrow(control_dates_df_final)){
   dates1 <- seq(as.Date(control_dates_df_final$control1_start[i]), as.Date(control_dates_df_final$control1_end[i]), by = "day")
   dates2 <- seq(as.Date(control_dates_df_final$control2_start[i]), as.Date(control_dates_df_final$control2_end[i]), by = "day")
@@ -344,17 +314,13 @@ zipcode_flood_control_array_week$year <- lubridate::year(zipcode_flood_control_a
 zipcode_flood_control_array_week$month <- lubridate::month(zipcode_flood_control_array_week$control_dates_expanded)
 zipcode_flood_control_array_week$day <- lubridate::day(zipcode_flood_control_array_week$control_dates_expanded)
 
-
-#simplify into one step 
 zipcode_flood_control_array_week <- zipcode_flood_control_array_week[,c(1,9,2,10:12,4:8,3)]
 zipcode_flood_control_array_week <- rename(zipcode_flood_control_array_week, date = control_dates_expanded)
 
 save(zipcode_flood_control_array_week, file = "zipcode_flood_control_array_week_2000_2016_APR.Rdata")
 
 #------------------------------------------------------------------------------
-#Modify below in order to successfully merge and aggregate with Medicare data 
-#zipcode_flood_control_array_week <- readRDS("~/Desktop/HARVARD/Spring2022/IndStudy/GFD_USA/zipcode_flood_control_array_week_2000_2016.rds")
-#zipcode_flood_exp_lag_array_week <- readRDS("~/Desktop/HARVARD/Spring2022/IndStudy/GFD_USA/zipcode_flood_exp_lag_array_week_2000_2016.rds")
+#Use below to successfully merge and aggregate with Medicare data 
 
 zipcode_flood_control_array_week$date <- NULL
 zipcode_flood_exp_lag_array_week$date <- NULL
@@ -379,6 +345,4 @@ zipcode_flood_semifinal_array_week <- rbind(zipcode_flood_exp_lag_array_week, zi
 zipcode_flood_semifinal_array_week <- zipcode_flood_semifinal_array_week[order(zipcode_flood_semifinal_array_week$floodzip_id),]
 zipcode_flood_semifinal_array_week <- zipcode_flood_semifinal_array_week[,c(1:10,12:16,11)]
 save(zipcode_flood_semifinal_array_week, file = "zipcode_flood_semifinal_array_week_2000_2016_APR.Rdata")
-
-#zipcode_flood_semifinal_array_week <- readRDS("~/Desktop/HARVARD/Spring2022/IndStudy/GFD_USA/zipcode_flood_semifinal_array_week_2000_2016.rds")
 
