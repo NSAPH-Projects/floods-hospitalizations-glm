@@ -46,6 +46,11 @@ dat.results.adjusted$cause[126:130] <- "Mental illness"
 dat.results.adjusted$blk[1:65] <- "Zipcodes with % Black below 50th quantile"
 dat.results.adjusted$blk[66:130] <- "Zipcodes with % Black above 50th quantile"
 
+# colors.ccs.level.1 <- c("#9E0142","#D53E4F","#F46D43","#FDAE61", "#FEE08B", "#FFF200",
+#                         "#E6F598", "#ABDDA4" ,"#66C2A5","#3288BD" ,"#9970AB", "#DE77AE","#74ADD1")
+# 
+# names(colors.ccs.level.1) <- unique(dat.results.adjusted$cause)
+
 colors.blk <- c("#94C773", "#ba9ce4")
 
 # reorder CCS level 1 causes for plotting
@@ -67,7 +72,7 @@ ggplot() +
     scale_color_manual(values=colors.blk) +
     guides(color=guide_legend(title="",nrow=1)) +
     coord_flip() +
-    theme_bw() + theme(text = element_text(size = 10),
+    theme_bw() + theme(text = element_text(size = 11),
                        panel.grid.major = element_blank(),axis.text.x = element_text(angle=0), axis.text.y = element_text(size=6),
                        plot.title = element_text(hjust = 0.5),panel.background = element_blank(),
                        panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),

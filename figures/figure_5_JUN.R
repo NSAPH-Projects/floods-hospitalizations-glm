@@ -31,6 +31,7 @@ for(cod in ccs_level_1){
 }
 
 dat.results.adjusted$cause[61:65] <- "Mental illness"
+dat.results.adjusted$cause[11:15] <- "Endocrine, metabolic, and immunity disorders"
 
 dir.output.model.summary.adjusted = paste0('/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/Sensitivity/results_severity2_JUN/level1/unconstrained_dlm/summary/adjusted/')
 for(cod in ccs_level_1){
@@ -42,9 +43,15 @@ for(cod in ccs_level_1){
 }
 
 dat.results.adjusted$cause[126:130] <- "Mental illness"
+dat.results.adjusted$cause[76:80] <- "Endocrine, metabolic, and immunity disorders"
 
 dat.results.adjusted$severity[1:65] <- "Moderate severity"
 dat.results.adjusted$severity[66:130] <- "High or extreme severity"
+
+# colors.ccs.level.1 <- c("#9E0142","#D53E4F","#F46D43","#FDAE61", "#FEE08B", "#FFF200",
+#                         "#E6F598", "#ABDDA4" ,"#66C2A5","#3288BD" ,"#9970AB", "#DE77AE","#74ADD1")
+# 
+# names(colors.ccs.level.1) <- unique(dat.results.adjusted$cause)
 
 colors.severity <- c("#DF7027", "#A5D6D9")
 
@@ -67,7 +74,7 @@ ggplot() +
     scale_color_manual(values=colors.severity) +
     guides(color=guide_legend(title="",nrow=1)) +
     coord_flip() +
-    theme_bw() + theme(text = element_text(size = 10),
+    theme_bw() + theme(text = element_text(size = 11),
                        panel.grid.major = element_blank(),axis.text.x = element_text(angle=0), axis.text.y = element_text(size=6),
                        plot.title = element_text(hjust = 0.5),panel.background = element_blank(),
                        panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),

@@ -80,7 +80,7 @@ p <- final_df2 %>%
     xlab('Lag (weeks after exposure)') + ylab('Hospitalization rate (cases/person-time)') +
     scale_y_continuous(limits = c(0, 0.00025), expand = c(0, 0)) +
     scale_fill_manual(values = c("black", "gray")) + 
-    theme_bw() + theme(text = element_text(size = 15),
+    theme_bw() + theme(text = element_text(size = 11),
                        axis.title.y = element_text(margin=margin(b=1000)),
                        panel.grid.major = element_blank(),
                        plot.title = element_text(hjust = 0.5),panel.background = element_blank(),
