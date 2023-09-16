@@ -82,8 +82,6 @@ ggplot() +
   geom_point(data=subset(dat.results.adjusted), aes(x=as.factor(lag.factor),y=rr,color=cause),size=2,shape=16) + 
   geom_point(data=subset(dat.results[c(6, 12, 18, 24, 30, 36, 42, 48, 54, 60, 66, 72, 78),]), aes(x = as.factor(lag.factor), y = rr, color = cause), size = 4, shape = 16) +
   geom_errorbar(data=subset(dat.results[c(6, 12, 18, 24, 30, 36, 42, 48, 54, 60, 66, 72, 78),]), aes(x= as.factor(lag.factor), ymax = rr.ll.bfc, ymin=rr.ul.bfc, color = cause), width = .2, size = 0.5) +
-  #geom_hline(data=dat.results.level.1.adjusted,aes(yintercept=rr.ll.bfc),linetype= 'solid',color = colors.ccs.level.1.means) + 
-  #geom_hline(data=dat.results.level.1.adjusted,aes(yintercept=rr.ul.bfc),linetype= 'solid',color = colors.ccs.level.1.means) + 
   geom_hline(yintercept=0,linetype='dotted') +
   xlab('Lag (weeks after exposure)') + ylab('Percentage change in hospitalization rates associated with flood exposure') +
   facet_wrap(vars(cause),ncol=3) +

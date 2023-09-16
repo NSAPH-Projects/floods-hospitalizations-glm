@@ -31,6 +31,7 @@ for(cod in ccs_level_1){
 }
 
 dat.results.adjusted$cause[61:65] <- "Mental illness"
+dat.results.adjusted$cause[11:15] <- "Endocrine, metabolic, and immunity disorders"
 
 dir.output.model.summary.adjusted = paste0('/n/dominici_nsaph_l3/Lab/projects/floods-hospitalizations-glm/Sensitivity/results_blk2_JUN/level1/unconstrained_dlm/summary/adjusted/')
 for(cod in ccs_level_1){
@@ -42,14 +43,10 @@ for(cod in ccs_level_1){
 }
 
 dat.results.adjusted$cause[126:130] <- "Mental illness"
+dat.results.adjusted$cause[76:80] <- "Endocrine, metabolic, and immunity disorders"
 
 dat.results.adjusted$blk[1:65] <- "Zipcodes with % Black below 50th quantile"
 dat.results.adjusted$blk[66:130] <- "Zipcodes with % Black above 50th quantile"
-
-# colors.ccs.level.1 <- c("#9E0142","#D53E4F","#F46D43","#FDAE61", "#FEE08B", "#FFF200",
-#                         "#E6F598", "#ABDDA4" ,"#66C2A5","#3288BD" ,"#9970AB", "#DE77AE","#74ADD1")
-# 
-# names(colors.ccs.level.1) <- unique(dat.results.adjusted$cause)
 
 colors.blk <- c("#94C773", "#ba9ce4")
 

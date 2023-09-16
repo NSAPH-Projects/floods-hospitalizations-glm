@@ -48,11 +48,6 @@ dat.results.adjusted$cause[76:80] <- "Endocrine, metabolic, and immunity disorde
 dat.results.adjusted$severity[1:65] <- "Moderate severity"
 dat.results.adjusted$severity[66:130] <- "High or extreme severity"
 
-# colors.ccs.level.1 <- c("#9E0142","#D53E4F","#F46D43","#FDAE61", "#FEE08B", "#FFF200",
-#                         "#E6F598", "#ABDDA4" ,"#66C2A5","#3288BD" ,"#9970AB", "#DE77AE","#74ADD1")
-# 
-# names(colors.ccs.level.1) <- unique(dat.results.adjusted$cause)
-
 colors.severity <- c("#DF7027", "#A5D6D9")
 
 # reorder CCS level 1 causes for plotting
