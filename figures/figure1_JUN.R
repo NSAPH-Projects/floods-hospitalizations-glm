@@ -43,7 +43,9 @@ state_map_flood <- ggplot() + geom_polygon(data = state_mappy2,
                                            aes(x = x, y = y, group = group, fill = `sum(indicator)`), 
                                            color = "black", size = 0.2) + scale_fill_gradientn(name="Number of floods", colors = colorpalette,
                                                                                                limits = c(0,40), breaks=c(5,10,15,20,25,30,35)) +
-  theme(legend.position = "bottom") +
+  theme(legend.position = "bottom",
+        legend.box.spacing = unit(0, "pt"),
+        legend.margin=margin(0,0,0,0)) +
   ggtitle("") + xlim("") + ylim("") +
   xlab("") + ylab("")
 
@@ -81,7 +83,6 @@ pop <- ggplot(data=dat2, aes(x=year, y=pop_exposed, group = 1)) +
   xlab("Year") +
   ylab("Population impacted by flood exposure")
 
-figure1 <- ggarrange(state_map_flood, pop, nrow=1,ncol=2,labels=c("",""),
-               common.legend = FALSE)
+figure1 <- ggarrange(state_map_flood, pop, nrow=2,ncol=1,labels=c("A","B"),heights = c(6,4))
 
   
