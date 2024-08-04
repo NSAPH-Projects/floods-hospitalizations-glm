@@ -71,16 +71,16 @@ dat.results.level.1.adjusted <- dat.results.level.1.adjusted[,c(2,3,4,1,5)]
   
 dat.results <- rbind(dat.results.adjusted, dat.results.level.1.adjusted)
 dat.results <- dat.results %>% arrange(cause)
-dat.results$lag.factor <- factor(dat.results$lag.factor, levels = c("", 4, 3, 2, 1, 0))
+dat.results$lag.factor <- factor(dat.results$lag.factor, levels = c("", 0, 1, 2, 3, 4))
 
 # save plot output for Figure 3 (adjusted)
 pdf(paste0(output.folder,'figure_3.pdf'),paper='a4r',width=0,height=0)
 ggplot() +
-  geom_errorbar(data=subset(dat.results.adjusted),aes(x=as.factor(lag.factor),ymax=rr.ll.bfc,ymin=rr.ul.bfc),width=.2,size=0.5) +
-  geom_point(data=subset(dat.results.adjusted), aes(x=as.factor(lag.factor),y=rr),size=3,shape=16) +
-  geom_point(data=subset(dat.results.adjusted), aes(x=as.factor(lag.factor),y=rr,color=cause),size=2,shape=16) + 
-  geom_point(data=subset(dat.results[c(6, 12, 18, 24, 30, 36, 42, 48, 54, 60, 66, 72, 78),]), aes(x = as.factor(lag.factor), y = rr, color = cause), size = 4, shape = 16) +
-  geom_errorbar(data=subset(dat.results[c(6, 12, 18, 24, 30, 36, 42, 48, 54, 60, 66, 72, 78),]), aes(x= as.factor(lag.factor), ymax = rr.ll.bfc, ymin=rr.ul.bfc, color = cause), width = .2, size = 0.5) +
+  geom_errorbar(data=subset(dat.results.adjusted),aes(x=fct_inorder(lag.factor),ymax=rr.ll.bfc,ymin=rr.ul.bfc),width=.2,size=0.5) +
+  geom_point(data=subset(dat.results.adjusted), aes(x=fct_inorder(lag.factor),y=rr),size=3,shape=16) +
+  geom_point(data=subset(dat.results.adjusted), aes(x=fct_inrder(lag.factor),y=rr,color=cause),size=2,shape=16) + 
+  geom_point(data=subset(dat.results[c(1, 7, 13, 19, 25, 31, 37, 43, 49, 55, 61, 67, 73),]), aes(x = lag.factor, y = rr, color = cause), size = 4, shape = 16) +
+  geom_errorbar(data=subset(dat.results[c(1, 7, 13, 19, 25, 31, 37, 43, 49, 55, 61, 67, 73),]), aes(x= lag.factor, ymax = rr.ll.bfc, ymin=rr.ul.bfc, color = cause), width = .2, size = 0.5) +
   geom_hline(yintercept=0,linetype='dotted') +
   xlab('Lag (weeks after exposure)') + ylab('Percentage change in hospitalization rates associated with flood exposure') +
   facet_wrap(vars(cause),ncol=3) +
