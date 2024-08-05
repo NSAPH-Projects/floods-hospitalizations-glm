@@ -54,39 +54,64 @@ rates_vec_exp <- as.vector(rates$exp)
 final_df_exp <- data.frame(lags, causes, rates_vec_exp)
 print(final_df_exp)
 final_df_exp$causes <- gsub("Mental Illness", "Mental illness", final_df_exp$causes)
+final_df_exp$causes <- gsub("Endocrine; nutritional; and metabolic diseases and immunity disorders", "Endocrine, metabolic, and immunity disorders", final_df_exp$causes)
 
 rates_vec_con <- as.vector(rates$con)
 final_df_con <- data.frame(lags, causes, rates_vec_con)
 print(final_df_con)
 final_df_con$causes <- gsub("Mental Illness", "Mental illness", final_df_con$causes)
-
-causes_groups[13] <- "Mental illness"
-
-# colors.ccs.level.1 <- c("#9E0142","#D53E4F","#F46D43","#FDAE61", "#FEE08B", "#FFF200",
-#                         "#E6F598", "#ABDDA4" ,"#66C2A5" ,"#3288BD" ,"#9970AB", "#DE77AE","#74ADD1")
-# names(colors.ccs.level.1) <- causes_groups
+final_df_con$causes <- gsub("Endocrine; nutritional; and metabolic diseases and immunity disorders", "Endocrine, metabolic, and immunity disorders", final_df_con$causes)
 
 final_df <- cbind(final_df_exp, final_df_con$rates_vec_con)
 colnames(final_df) <- c("lags", "causes", "rates_vec_exp", "rates_vec_con")
-final_df2 <- data.frame(rep(final_df$lags, 2), rep(final_df$causes, 2), c(final_df$rates_vec_exp, final_df$rates_vec_con), rep(c("Event", "Control"), each = 65))
-colnames(final_df2) <- c("lags", "causes", "rates", "indicator")
+final_df$rate_ratio <- final_df$rates_vec_exp/final_df$rates_vec_con
+
+cases <- data.frame()
+for (i in 1:length(causes_groups)){
+  # CCS level 1 input file
+  input.file = # CCS level 1 input file
+  dat <- readRDS(paste0(input.file))
+  dat <- dat[!(dat$floodzip_id %in% c(floodzips_remove)),] 
+  dat <- dat[!(dat$zipcode %in% c(missing_zipcodes, AK_zips)),]
+  dat$control_indicator <- ifelse(dat$control_indicator == "2", "1", dat$control_indicator)
+  for (j in c(1:5)){
+    dat3 <- dat[seq(from = j, to = nrow(dat), by = 5),]
+    dat3 <- dat2 %>% group_by(control_indicator) %>% summarise(total_cases = sum(cases_final)) 
+    cases <- rbind(cases, dat3)
+  }
+}
+
+cases$lag <- rep(c(0,0,1,1,2,2,3,3,4,4), 13)
+
+cases$causes <- rep(causes_groups, each = 10)
+cases$causes <- gsub("Mental Illness", "Mental illness", cases$causes)
+cases$causes <- gsub("Endocrine; nutritional; and metabolic diseases and immunity disorders", "Endocrine, metabolic, and immunity disorders", cases$causes)
+
+case_counts <- cases %>% group_by(causes) %>% summarise(total = sum(total_cases)) #auto sorts by alphabetical order of cause
+case_counts <- case_counts[c(10,13,9,1,6,2,7,3,4,8,5,11,12),]
+
+colors.ccs.level.1 <- c("#9E0142","#D53E4F","#F46D43","#FDAE61", "#FEE08B", "#FFF200",
+                        "#E6F598", "#ABDDA4" ,"#66C2A5" ,"#3288BD" ,"#9970AB", "#DE77AE","#74ADD1")
+
+names(colors.ccs.level.1) <- unique(final_df$causes)
+
+final_df$causes <- fct_inorder(as.factor(final_df$causes))
+case_counts$causes <- fct_inorder(as.factor(case_counts$causes))
 
 library(forcats)
 
-figure_2 <- final_df2 %>%  
-    mutate(indicator =  fct_relevel(indicator, "Event", "Control"))    %>%
-    ggplot(.,aes(x=lags,y=rates)) +
-    geom_bar(stat = "identity", position = position_dodge(), aes(fill = indicator)) +
-    facet_grid(.~causes) +
-    xlab('Lag (weeks after exposure)') + ylab('Hospitalization rate (cases/person-time)') +
-    scale_y_continuous(limits = c(0, 0.00025), expand = c(0, 0)) +
-    scale_fill_manual(values = c("black", "gray")) + 
-    theme_bw() + theme(text = element_text(size = 11),
-                       axis.title.y = element_text(margin=margin(b=1000)),
-                       panel.grid.major = element_blank(),
-                       plot.title = element_text(hjust = 0.5),panel.background = element_blank(),
-                       panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                       panel.border = element_rect(colour = "black"),
-                       legend.text=element_text(size=10),legend.title = element_blank(),
-                       legend.position = 'bottom',legend.justification='center',
-                       legend.background = element_rect(fill="white", size=.5, linetype="dotted"))
+p <- final_df %>%  
+  ggplot(.,aes(x=lags,y=rate_ratio - 1)) +
+  geom_bar(stat = "identity") +
+  facet_grid(.~causes) +
+  xlab('Lag (weeks after exposure)') + ylab('Crude hospitalization rate ratios (exposed/control)') +
+  scale_y_continuous(breaks = c(-0.1,-0.05,0.0,0.05), labels = c(0.90,.95,1.0,1.05)) +
+  theme_bw() + theme(text = element_text(size = 11),
+                     axis.title.y = element_text(margin=margin(b=1000)),
+                     panel.grid.major = element_blank(),
+                     plot.title = element_text(hjust = 0.5),panel.background = element_blank(),
+                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+                     panel.border = element_rect(colour = "black"),
+                     legend.text=element_text(size=10),legend.title = element_blank(),
+                     legend.position = 'bottom',legend.justification='center',
+                     legend.background = element_rect(fill="white", size=.5, linetype="dotted"))
