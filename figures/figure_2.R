@@ -93,19 +93,23 @@ case_counts <- case_counts[c(10,13,9,1,6,2,7,3,4,8,5,11,12),]
 colors.ccs.level.1 <- c("#9E0142","#D53E4F","#F46D43","#FDAE61", "#FEE08B", "#FFF200",
                         "#E6F598", "#ABDDA4" ,"#66C2A5" ,"#3288BD" ,"#9970AB", "#DE77AE","#74ADD1")
 
-names(colors.ccs.level.1) <- unique(final_df$causes)
+causes_shortened <- c("Infectious #", "Neoplasms #", "Endocrine #", "Blood #", "Nervous #", "Circulatory #", "Respiratory #", "Digestive #", 
+                      "Genitourinary #", "Skin #", "Musculoskeletal #", "Injuryy #", "Mental illness #")
 
 library(forcats)
+final_df$causes <- fct_inorder(as.factor(causes_shortened))
+case_counts$causes <- fct_inorder(as.factor(causes_shortened))
 
-final_df$causes <- fct_inorder(as.factor(final_df$causes))
-case_counts$causes <- fct_inorder(as.factor(case_counts$causes))
+names(colors.ccs.level.1) <- unique(final_df$causes)
 
 
+global_labeller <- labeller(
+  causes = label_wrap_gen(15))
 
 p <- final_df %>%  
   ggplot(.,aes(x=lags,y=rate_ratio - 1)) +
   geom_bar(stat = "identity", aes(fill = causes)) +
-  facet_wrap(.~causes, nrow = 2) +
+  facet_wrap(.~causes, labeller = global_labeller, nrow = 2) +
   xlab('Lag (weeks after exposure)') + ylab('Crude hospitalization rate ratios (exposed/control)') +
   scale_y_continuous(breaks = c(-0.1,-0.05,0.0,0.05), labels = c(0.90,.95,1.0,1.05)) +
   scale_fill_manual(values = colors.ccs.level.1) +
