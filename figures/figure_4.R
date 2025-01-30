@@ -1,5 +1,5 @@
 # Figure 4. Percentage change in hospitalization rates with flood exposure by cause of hospitalization,
-# severity and lag time. Lag time is measured in weeks after floods exposure.
+# proportion of residents that are Black and lag time. Lag time is measured in weeks after floods exposure.
 # Dots show the point estimates and error bars represent Bonferroni-corrected 95% confidence intervals.
 
 library(tidyverse)
@@ -19,8 +19,9 @@ code.lookup.merged = subset(code.lookup.merged, !(code_chapter%in%c("Complicatio
 # make list of broad causes of hospitalization (level 1 names)
 ccs_level_1 = unique(as.character(code.lookup.merged$code_chapter))
 
-# load model summaries for CCS level 1 (adjusted)
-dir.output.model.summary.adjusted = #path to model summaries for CCS level 1 (adjusted), moderate severity
+# load model summaries for CCS level 1 (adjusted) 
+dir.output.model.summary.adjusted = #path to CCS level 1 model summary, below median percentile Black residents 
+dat.results.adjusted = data.frame()
 for(cod in ccs_level_1){
     file.current = #CCS level 1 model summary 
     if (file.exists(file.current)){
@@ -32,7 +33,7 @@ for(cod in ccs_level_1){
 dat.results.adjusted$cause[61:65] <- "Mental illness"
 dat.results.adjusted$cause[11:15] <- "Endocrine, metabolic, and immunity disorders"
 
-dir.output.model.summary.adjusted = #path to model summaries for CCS level 1 (adjusted), high or extreme severity 
+dir.output.model.summary.adjusted = #path to CCS level 1 model summary, above median percentile Black residents
 for(cod in ccs_level_1){
     file.current = #CCS level 1 model summary 
     if (file.exists(file.current)){
@@ -44,10 +45,10 @@ for(cod in ccs_level_1){
 dat.results.adjusted$cause[126:130] <- "Mental illness"
 dat.results.adjusted$cause[76:80] <- "Endocrine, metabolic, and immunity disorders"
 
-dat.results.adjusted$severity[1:65] <- "Moderate severity"
-dat.results.adjusted$severity[66:130] <- "High or extreme severity"
+dat.results.adjusted$blk[1:65] <- "Proportion of Black residents below 50th quantile"
+dat.results.adjusted$blk[66:130] <- "Proportion of Black residents above 50th quantile"
 
-colors.severity <- c("#DF7027", "#A5D6D9")
+colors.blk <- c("#94C773", "#ba9ce4")
 
 # reorder CCS level 1 causes for plotting
 dat.results.adjusted$cause = factor(dat.results.adjusted$cause,
@@ -59,13 +60,13 @@ dat.results.adjusted$lag.factor = factor(dat.results.adjusted$lag, levels=c(4:0)
 # save plot output for Figure 4
 pdf(paste0(output.folder,'figure_4.pdf'),paper='a4r',width=0,height=0)
 ggplot() +
-    geom_errorbar(data=subset(dat.results.adjusted),aes(x=as.factor(lag.factor),ymax=rr.ll.bfc-1,ymin=rr.ul.bfc-1,color=as.factor(severity)),width=0.5,size=0.5,alpha=1,position=position_dodge(width=0.7)) +
-    geom_point(data=subset(dat.results.adjusted), aes(x=as.factor(lag.factor),y=rr-1,color=as.factor(severity)),size=2.5,shape=16,position=position_dodge(width=0.7)) +
+    geom_errorbar(data=subset(dat.results.adjusted),aes(x=as.factor(lag.factor),ymax=rr.ll.bfc-1,ymin=rr.ul.bfc-1,color=as.factor(blk)),width=0.5,size=0.5,alpha=1,position=position_dodge(width=0.7)) +
+    geom_point(data=subset(dat.results.adjusted), aes(x=as.factor(lag.factor),y=rr-1,color=as.factor(blk)),size=2.5,shape=16,position=position_dodge(width=0.7)) +
     geom_hline(yintercept=0,linetype='dotted') +
     xlab('Lag (weeks after exposure)') + ylab('Percentage change in hospitalization rates associated with flood exposure') +
     facet_wrap(vars(cause),ncol=2) +
     scale_y_continuous(labels=scales::percent_format(accuracy=1)) +
-    scale_color_manual(values=colors.severity) +
+    scale_color_manual(values=colors.blk) +
     guides(color=guide_legend(title="",nrow=1)) +
     coord_flip() +
     theme_bw() + theme(text = element_text(size = 11),
