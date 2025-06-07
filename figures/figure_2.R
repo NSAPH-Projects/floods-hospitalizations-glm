@@ -31,8 +31,7 @@ dat.results.adjusted$cause[61:65] <- "Mental illness"
 dat.results.adjusted$cause[11:15] <- "Endocrine, metabolic, and immunity disorders"
 
 dat.results.level.1.adjusted <- dat.results.adjusted %>% group_by(cause) %>% summarise(err.mean = (sum(rr-1))/5)
-err.mean.ll <- #use delta method to obtain SE estimate for average effect
-err.mean.ul <- #use delta method to obtain SE estimate for average effect
+err.mean <- #use delta method to obtain SE estimate for each cause-specific average effect, then compute lower and upper limits of CI
                                                                                       
 dat.results.adjusted$cause = factor(dat.results.adjusted$cause,
                                     levels=unique(dat.results.adjusted$cause))
