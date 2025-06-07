@@ -57,7 +57,7 @@ colorpalette <- c('cornsilk',"lightblue", "blue","darkblue","black")
 sf_use_s2(FALSE)
 
 usa <- tm_shape(contig_us) + 
-  tm_polygons(col = "Freq", pal = colorpalette, style = "cont", border.col = "black", lwd = 0.1, title = "Number of unique flood exposures by ZIP Code", legend.is.portrait = FALSE) + 
+  tm_polygons(col = "Freq", pal = colorpalette, style = "cont", border.col = "black", lwd = 0.1, title = "Number of unique flood exposures", legend.is.portrait = FALSE) + 
   tmap_options(check.and.fix = TRUE) + 
   tm_layout(frame = FALSE, legend.outside=TRUE, legend.outside.position = "bottom")
 usa

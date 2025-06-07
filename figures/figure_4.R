@@ -45,8 +45,8 @@ for(cod in ccs_level_1){
 dat.results.adjusted$cause[126:130] <- "Mental illness"
 dat.results.adjusted$cause[76:80] <- "Endocrine, metabolic, and immunity disorders"
 
-dat.results.adjusted$blk[1:65] <- "Proportion of Black residents below 50th quantile"
-dat.results.adjusted$blk[66:130] <- "Proportion of Black residents above 50th quantile"
+dat.results.adjusted$blk[1:65] <- "Proportion of Black residents below 50th percentile"
+dat.results.adjusted$blk[66:130] <- "Proportion of Black residents above 50th percentile"
 
 colors.blk <- c("#94C773", "#ba9ce4")
 

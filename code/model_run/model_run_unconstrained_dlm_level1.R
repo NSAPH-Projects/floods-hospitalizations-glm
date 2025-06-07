@@ -106,6 +106,18 @@ nrow(dat)
     # merging windspeed data with model matrix 
     dat.wind <- #path to windspeed data file
     dat$vs <- dat.wind$vs
+    
+    # merging particulate matter (2.5) data with model matrix 
+    dat.pm <- #path to particulate matter (2.5) data file
+    dat$pm25 <- dat.pm$pm25
+    
+    # merging nitrogen dioxide data with model matrix 
+    dat.nidi <- #path to nitrogen dioxide data file
+    dat$no2 <- dat.nidi$no2
+    
+    # merging ozone data with model matrix 
+    dat.ozone <- #path to ozone data file
+    dat$o3 <- dat.ozone$o3
 
 dat.sample <- dat
 print(dat.sample[1:30,])
@@ -138,12 +150,22 @@ cb1.hum = crossbasis(dat.sample$rmax,argvar=list("ns", df=2),lag=0, arglag=list(
 # windspeed of the recorded flooded days (did not adjust for day before as of 1/18/2023)
 cb1.wind = crossbasis(dat.sample$vs,argvar=list("ns", df=2),lag=0, arglag=list("ns", df=2))
 
+# particulate matter (2.5) of the recorded flooded days (did not adjust for day before as of 1/18/2023)
+cb1.pm25 = crossbasis(dat.sample$pm2.5,argvar=list("ns", df=2),lag=0, arglag=list("ns", df=2))
+
+# nitrogen dioxide of the recorded flooded days (did not adjust for day before as of 1/18/2023)
+cb1.no2 = crossbasis(dat.sample$no2,argvar=list("ns", df=2),lag=0, arglag=list("ns", df=2))
+
+# ozone of the recorded flooded days (did not adjust for day before as of 1/18/2023)
+cb1.o3 = crossbasis(dat.sample$o3,argvar=list("ns", df=2),lag=0, arglag=list("ns", df=2))
+
+
 # distributed lag unconstrained
 system.time
 ({
 
     mod_dlm_unconstrained_adjusted = gnm(cases_final ~ exposed + lag_wk1 + lag_wk2 + lag_wk3 + lag_wk4 + cb1.temp + cb1.hum + cb1.wind +
-                                ns(year, df=2), data=dat.sample, offset=logpt, eliminate=factor(floodzip_id), family=quasipoisson)
+                                           + cb1.pm25 + cb1.no2 + cb1.o3 + ns(year, df=2), data=dat.sample, offset=logpt, eliminate=factor(floodzip_id), family=quasipoisson)
 
 })
 
