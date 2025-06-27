@@ -1,1 +1,12 @@
-## Severe flooding and cause-specific hospitalization among older adults in the United States 
+# Severe flooding and cause-specific hospitalization among older adults in the United States 
+
+
+
+## Overview
+
+This repository contains R scripts for processing and analyzing flood exposure data to study mechanisms for cause-specific hospitalization in Medicare enrollees from 2000-2016 in the contiguous United States. All code for visualizations included in the manuscript is also included. 
+
+## Contact
+
+- **Author**: Sarika Aggarwal
+- **Email**: saggarwal@g.harvard.edu 
