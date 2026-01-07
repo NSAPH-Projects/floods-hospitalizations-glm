@@ -1,6 +1,6 @@
-# Severe flooding and cause-specific hospitalization among older adults in the United States 
+# Severe flooding and cause-specific hospitalization among older adults in the USA: a retrospective matched cohort analysis
 
-Paper: 
+Paper: Aggarwal S. Hu J.K., Sullivan J.A., Parks R.M., and Nethery R.C. (2025). Severe flooding and cause-specific hospitalization among older adults in the USA: a retrospective matched cohort analysis. Lancet Planetary Health 9(7): 101268.
 
 ## Overview
 
